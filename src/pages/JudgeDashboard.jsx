@@ -5,6 +5,29 @@ import { IconLogout, IconArrow } from '../components/Icons.jsx';
 import { supabase } from '../lib/supabase.js';
 import { getJudge, clearJudge } from '../lib/auth.js';
 
+const CRITERIA = [
+  {
+    n: '01',
+    title: 'INNOVATION & ORIGINALITY',
+    desc: 'Is the idea novel? Does it solve a real problem in a fresh way?',
+  },
+  {
+    n: '02',
+    title: 'TECHNICAL EXECUTION',
+    desc: 'Quality of build, working demo, technical depth.',
+  },
+  {
+    n: '03',
+    title: 'PRESENTATION & COMMUNICATION',
+    desc: 'Clarity of pitch, demo flow, ability to explain.',
+  },
+  {
+    n: '04',
+    title: 'IMPACT & FEASIBILITY',
+    desc: 'Real-world potential, scalability, viability.',
+  },
+];
+
 export default function JudgeDashboard() {
   const navigate = useNavigate();
   const judge = getJudge();
@@ -114,6 +137,36 @@ export default function JudgeDashboard() {
             <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-paper/70">
               · 25 pts each · 100 max
             </div>
+          </div>
+        </div>
+
+        <div className="mt-12">
+          <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
+            <h2 className="font-display font-black text-3xl">
+              JUDGING <span className="italic text-ieee">RUBRIC</span>
+            </h2>
+            <span className="font-mono text-[12px] uppercase tracking-wider text-ink/60">
+              0 – 25 each · 100 total
+            </span>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {CRITERIA.map((c) => (
+              <div key={c.n} className="card-brut bg-paper p-5">
+                <div className="flex items-baseline justify-between">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink/60">
+                    {c.n}
+                  </span>
+                  <span className="font-display italic font-black text-3xl text-ieee tabular-nums leading-none">
+                    25
+                    <span className="text-ink/40 text-sm"> pts</span>
+                  </span>
+                </div>
+                <h3 className="mt-2 font-display font-black text-lg leading-tight">
+                  {c.title}
+                </h3>
+                <p className="mt-2 text-xs text-ink/70 leading-snug">{c.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
 
