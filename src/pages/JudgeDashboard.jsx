@@ -22,7 +22,7 @@ export default function JudgeDashboard() {
         const [{ data: tData, error: tErr }, { data: sData, error: sErr }] = await Promise.all([
           supabase
             .from('teams')
-            .select('id, team_name, project_title, members')
+            .select('id, team_name, project_title, members, github_url')
             .order('created_at', { ascending: true }),
           supabase
             .from('scores')
@@ -176,6 +176,17 @@ export default function JudgeDashboard() {
                     <div className="eyebrow mb-1">Members</div>
                     <p className="text-sm text-ink/70 line-clamp-2">{team.members}</p>
                   </div>
+                  {team.github_url && (
+                    <a
+                      href={team.github_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="mt-3 inline-flex items-center font-mono text-[11px] uppercase tracking-[0.18em] underline text-ink/70 hover:text-amber break-all"
+                    >
+                      open repo ↗
+                    </a>
+                  )}
                   <div className="mt-4 flex items-center justify-end font-mono text-[12px] uppercase tracking-[0.18em] text-amber">
                     {scored ? 'Adjust score' : 'Score now'} <IconArrow width="14" height="14" />
                   </div>

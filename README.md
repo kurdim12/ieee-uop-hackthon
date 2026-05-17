@@ -3,45 +3,46 @@
 A full-stack judging platform for a one-day university hackathon.
 Built with **React (Vite) + Tailwind CSS + React Router + Supabase**.
 
-It handles:
-
-- Public **team registration**
-- **Judge login** and a per-judge scoring desk
-- **Live leaderboard** with a fairness rule: a team's total is only
-  shown publicly once all judges have scored it
-
-The visual direction is editorial / brutalist — cream paper, hard
-black borders, burnt amber accent, large Fraunces display type.
+Teams submit their idea (with a GitHub repo link), three judges score on
+four criteria, the leaderboard updates live, and an admin dashboard
+gives the organizer a full overview with CSV export.
 
 ---
 
 ## 1. Set up Supabase
 
 1. Create a new project at <https://supabase.com/>.
-2. Open the **SQL Editor** and run the contents of
-   [`supabase/schema.sql`](./supabase/schema.sql).
-   This creates the `teams`, `judges`, `scores` tables, the
+2. Open the **SQL Editor** and paste / run [`supabase/schema.sql`](./supabase/schema.sql).
+   This creates the `teams`, `judges`, `admins`, `scores` tables, the
    `leaderboard` view, opens RLS policies, and seeds three judge
-   accounts.
+   accounts plus one admin account.
 3. Open **Project Settings → API** and copy:
    - `Project URL`  →  `VITE_SUPABASE_URL`
    - `anon` public key  →  `VITE_SUPABASE_ANON_KEY`
 
-> The `scores` table has a `UNIQUE (team_id, judge_id)` constraint so
-> the app can upsert: a judge can adjust their score for a team and it
-> overwrites the previous row.
+> The schema includes a migration block at the bottom — safe to re-run
+> against an existing database. It adds `github_url` to `teams` and
+> rebuilds the leaderboard view.
 
-### Seeded judge credentials
+### Seeded credentials
 
-| Username | Password     | Display name |
-| -------- | ------------ | ------------ |
-| `judge1` | `changeme1`  | Judge One    |
-| `judge2` | `changeme2`  | Judge Two    |
-| `judge3` | `changeme3`  | Judge Three  |
+**Judges** (sign in at `/login`, then score teams at `/judge`):
 
-**Change the passwords before the event** — they live in plain text in
-the `judges` table by design (one-day event, low stakes). To rotate,
-just update the row in the Supabase table editor.
+| Username | Password            | Display name |
+| -------- | ------------------- | ------------ |
+| `judge1` | `judge-ieee-2026-a` | Judge One    |
+| `judge2` | `judge-ieee-2026-b` | Judge Two    |
+| `judge3` | `judge-ieee-2026-c` | Judge Three  |
+
+**Admin** (sign in at `/admin/login`, then preview everything at `/admin`):
+
+| Username | Password          | Display name    |
+| -------- | ----------------- | --------------- |
+| `admin`  | `admin-ieee-2026` | Hackathon Admin |
+
+**Change every password in the `judges` and `admins` tables before the
+event** — they're stored in plain text by design (one-day event, low
+stakes). Rotate via Supabase table editor.
 
 ---
 
@@ -51,12 +52,17 @@ just update the row in the Supabase table editor.
 cp .env.example .env
 ```
 
-Then edit `.env`:
+Edit `.env`:
 
 ```
 VITE_SUPABASE_URL=https://YOUR-PROJECT-REF.supabase.co
 VITE_SUPABASE_ANON_KEY=YOUR-PUBLIC-ANON-KEY
 ```
+
+When deploying to Vercel or Cloudflare, add the **same two variables**
+in the platform's dashboard (Settings → Environment Variables) and
+**redeploy** — Vite bakes `VITE_*` vars in at build time, so existing
+builds won't pick up new env vars without a rebuild.
 
 ---
 
@@ -69,7 +75,7 @@ npm run dev
 
 Open <http://localhost:5173>.
 
-To build for production:
+Production build / preview:
 
 ```bash
 npm run build
@@ -80,46 +86,73 @@ npm run preview
 
 ## 4. Routes
 
-| Path              | Who          | What it does                                                                 |
-| ----------------- | ------------ | ---------------------------------------------------------------------------- |
-| `/`               | Public       | Landing page — hero, challenge, tracks, timeline, judging criteria           |
-| `/register`       | Public       | Team registration form (writes to `teams`)                                   |
-| `/login`          | Public       | Judge login (queries `judges` by username + password)                        |
-| `/judge`          | Judge only   | List of all teams, marked `NOT SCORED` or `SCORED: x/100`                    |
-| `/judge/:teamId`  | Judge only   | Score the team across 4 criteria (0–25 each), upsert into `scores`          |
-| `/leaderboard`    | Public       | Live podium + table, refreshed every 10 s. Hides teams not fully judged.    |
+| Path             | Who          | What it does                                                            |
+| ---------------- | ------------ | ----------------------------------------------------------------------- |
+| `/`              | Public       | Landing page                                                            |
+| `/submit`        | Public       | Submit your idea (team, members, project, GitHub link, contact)         |
+| `/register`      | Public       | Redirects to `/submit` (kept for back-compat)                           |
+| `/login`         | Public       | Judge login                                                             |
+| `/judge`         | Judge only   | List of all submissions, marked `NOT SCORED` or `SCORED: x/100`         |
+| `/judge/:teamId` | Judge only   | Score a team across 4 criteria (0–25 each), upserts into `scores`       |
+| `/leaderboard`   | Public       | Live podium + table, refreshed every 10 s, hides totals until all 3 judges scored |
+| `/admin/login`   | Public       | Admin login                                                             |
+| `/admin`         | Admin only   | Full submissions table with per-judge breakdown + CSV export            |
 
-`/judge` and `/judge/:teamId` are wrapped in a `<RequireJudge>` guard
-that redirects to `/login` when there is no `judge_session` in
-localStorage.
+`/judge` and `/judge/:teamId` are wrapped in `<RequireJudge>`; `/admin`
+is wrapped in `<RequireAdmin>`. Both guards redirect to the relevant
+login on missing session.
+
+**Admin preview link** (replace the host with your own deploy domain):
+
+```
+https://<your-deploy-host>/admin/login
+```
+
+After logging in with the admin credentials above, you'll land on `/admin`
+which shows every submission, the GitHub link, contact details, scoring
+progress per judge, and a CSV export button.
 
 ---
 
 ## 5. Scoring model
 
-| Criterion                       | Max |
-| ------------------------------- | --- |
-| Innovation & originality        | 25  |
-| Technical execution             | 25  |
-| Presentation & communication    | 25  |
-| Impact & feasibility            | 25  |
-| **Total**                       | **100** |
+| Criterion                    | Max     |
+| ---------------------------- | ------- |
+| Innovation & originality     | 25      |
+| Technical execution          | 25      |
+| Presentation & communication | 25      |
+| Impact & feasibility         | 25      |
+| **Total**                    | **100** |
 
 The `total` column is `GENERATED ALWAYS AS (innovation + execution +
 presentation + impact) STORED` so the database is the source of truth.
 
 ### Fairness rule on the leaderboard
 
-The Leaderboard view reads `judges_scored = COUNT(scores.id)` per team.
-The client only ranks teams whose `judges_scored >= 3` (the number of
-seeded judges). Everyone else appears at the bottom of the table with
-`PENDING` instead of a total. Change `REQUIRED_JUDGES` in
-[`src/pages/Leaderboard.jsx`](./src/pages/Leaderboard.jsx) if you seed a
-different number of judges.
+A team's total is shown publicly only once **all 3 judges have scored
+it**. Everyone else appears at the bottom with `PENDING`. Tweak
+`REQUIRED_JUDGES` in [`src/pages/Leaderboard.jsx`](./src/pages/Leaderboard.jsx)
+if you seed a different number of judges.
 
 ---
 
-## 6. Project structure
+## 6. Deploying
+
+**Vercel:** push to GitHub, import the repo, add `VITE_SUPABASE_URL`
+and `VITE_SUPABASE_ANON_KEY` env vars, deploy. `vercel.json` ships
+SPA rewrites so `/leaderboard`, `/admin`, etc. work on direct hit.
+
+**Cloudflare (Workers + Static Assets):** auto-detects Vite; needs
+Vite 6+ (we're on that). SPA fallback is handled by the
+auto-generated `wrangler.jsonc` (`"not_found_handling": "single-page-application"`).
+Add the same two env vars in Workers settings.
+
+**Cloudflare Pages:** import repo, build command `npm run build`,
+output `dist`, same env vars. Pages auto-handles SPA fallback.
+
+---
+
+## 7. Project structure
 
 ```
 .
@@ -128,55 +161,44 @@ different number of judges.
 ├── postcss.config.js
 ├── tailwind.config.js
 ├── vite.config.js
+├── vercel.json                    # SPA rewrites for Vercel
 ├── .env.example
 ├── supabase/
 │   └── schema.sql                 # run once in Supabase SQL editor
 └── src/
     ├── main.jsx
-    ├── App.jsx                    # routes + RequireJudge guard
-    ├── index.css                  # Tailwind + custom brutalist styles
+    ├── App.jsx                    # routes + Require guards
+    ├── index.css
     ├── lib/
-    │   ├── supabase.js            # createClient + env handling
-    │   └── auth.js                # getJudge / setJudge / clearJudge
+    │   ├── supabase.js
+    │   └── auth.js                # judge_session + admin_session helpers
     ├── components/
     │   ├── Layout.jsx
-    │   ├── Marquee.jsx            # scrolling top strip
-    │   ├── TopNav.jsx             # logo + page name + clock
+    │   ├── Marquee.jsx
+    │   ├── TopNav.jsx
     │   ├── RequireJudge.jsx
+    │   ├── RequireAdmin.jsx
     │   ├── Toast.jsx
-    │   └── Icons.jsx              # inline SVG line icons (no emoji)
+    │   └── Icons.jsx
     └── pages/
         ├── Landing.jsx
-        ├── Register.jsx
+        ├── Submit.jsx
         ├── Login.jsx
         ├── JudgeDashboard.jsx
         ├── ScoreTeam.jsx
-        └── Leaderboard.jsx
+        ├── Leaderboard.jsx
+        ├── AdminLogin.jsx
+        └── Admin.jsx
 ```
 
 ---
 
-## 7. Design notes
-
-- Palette: `#f4f0e6` paper, `#0a0a0a` ink, `#ff6b1a` amber,
-  `#1f3d2b` moss
-- Fonts: **Fraunces** (display, italic for emphasis), **Inter Tight**
-  (body), **JetBrains Mono** (numbers, scores, codes)
-- Hard `2px` black borders, offset `6px 6px 0 #000` drop shadows on
-  cards and buttons
-- Subtle SVG turbulence noise as a paper-grain overlay (`.paper-grain`
-  in `src/index.css`)
-- A black marquee strip scrolls at the top of every page
-- No emoji UI, no glassmorphism, no purple gradients
-
----
-
-## 8. Before the event — quick checklist
+## 8. Pre-event checklist
 
 - [ ] Run `supabase/schema.sql` in your Supabase project
-- [ ] Rotate the three judge passwords in the `judges` table
-- [ ] Fill in `.env` with your project URL and anon key
-- [ ] Edit the placeholder copy in `src/pages/Landing.jsx`
-      (challenge brief, event date, timeline)
-- [ ] Deploy: `npm run build` and host `/dist` anywhere static
-      (Vercel, Netlify, Cloudflare Pages all work out of the box)
+- [ ] Rotate the four passwords (3 judges + 1 admin)
+- [ ] Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` on every host
+- [ ] Trigger a fresh build/deploy after setting env vars
+- [ ] Edit the placeholder copy on the landing page
+- [ ] Test the full flow: submit → judge logs in → score → leaderboard
+      updates → admin sees the breakdown

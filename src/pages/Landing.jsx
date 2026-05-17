@@ -90,8 +90,8 @@ export default function Landing() {
                 decks — we are here for the moment the demo works.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
-                <Link to="/register" className="btn-primary">
-                  Register your team <IconArrow width="20" height="20" />
+                <Link to="/submit" className="btn-primary">
+                  Submit your idea <IconArrow width="20" height="20" />
                 </Link>
                 <Link to="/leaderboard" className="btn-ghost">
                   View leaderboard
@@ -289,8 +289,8 @@ export default function Landing() {
             see you in the room.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Link to="/register" className="btn-primary">
-              Register your team
+            <Link to="/submit" className="btn-primary">
+              Submit your idea
             </Link>
             <Link to="/login" className="btn-ghost">
               Judge login

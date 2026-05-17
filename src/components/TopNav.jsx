@@ -3,10 +3,13 @@ import { useEffect, useState } from 'react';
 
 const PAGE_LABELS = {
   '/': 'INDEX',
-  '/register': 'REGISTRATION',
+  '/submit': 'SUBMISSION',
+  '/register': 'SUBMISSION',
   '/login': 'JUDGE LOGIN',
   '/judge': 'JUDGE DESK',
   '/leaderboard': 'LEADERBOARD',
+  '/admin': 'ADMIN',
+  '/admin/login': 'ADMIN LOGIN',
 };
 
 function getPageLabel(pathname) {
