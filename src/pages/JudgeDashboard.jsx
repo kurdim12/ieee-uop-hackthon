@@ -1,0 +1,190 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Layout from '../components/Layout.jsx';
+import { IconLogout, IconArrow } from '../components/Icons.jsx';
+import { supabase } from '../lib/supabase.js';
+import { getJudge, clearJudge } from '../lib/auth.js';
+
+export default function JudgeDashboard() {
+  const navigate = useNavigate();
+  const judge = getJudge();
+  const [teams, setTeams] = useState([]);
+  const [scores, setScores] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      setLoading(true);
+      setError('');
+      try {
+        const [{ data: tData, error: tErr }, { data: sData, error: sErr }] = await Promise.all([
+          supabase
+            .from('teams')
+            .select('id, team_name, project_title, members')
+            .order('created_at', { ascending: true }),
+          supabase
+            .from('scores')
+            .select('team_id, total')
+            .eq('judge_id', judge.id),
+        ]);
+        if (tErr) throw tErr;
+        if (sErr) throw sErr;
+        if (cancelled) return;
+        setTeams(tData || []);
+        const map = {};
+        (sData || []).forEach((s) => {
+          map[s.team_id] = s.total;
+        });
+        setScores(map);
+      } catch (err) {
+        if (!cancelled) setError(err?.message || 'Failed to load teams.');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [judge.id]);
+
+  const sorted = useMemo(() => {
+    return [...teams].sort((a, b) => {
+      const ha = scores[a.id] != null ? 1 : 0;
+      const hb = scores[b.id] != null ? 1 : 0;
+      if (ha !== hb) return ha - hb;
+      return a.team_name.localeCompare(b.team_name);
+    });
+  }, [teams, scores]);
+
+  const scoredCount = useMemo(
+    () => teams.filter((t) => scores[t.id] != null).length,
+    [teams, scores]
+  );
+
+  function logout() {
+    clearJudge();
+    navigate('/login', { replace: true });
+  }
+
+  return (
+    <Layout status={`SIGNED IN · ${judge.username.toUpperCase()}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <div className="eyebrow mb-3">JUDGE DESK</div>
+            <h1 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
+              WELCOME,<br />
+              <span className="italic text-amber">{judge.full_name}.</span>
+            </h1>
+          </div>
+          <button onClick={logout} className="btn-ghost">
+            <IconLogout width="20" height="20" /> LOG OUT
+          </button>
+        </div>
+
+        <div className="mt-10 grid md:grid-cols-3 gap-4">
+          <div className="card-brut p-6">
+            <div className="eyebrow">PROGRESS</div>
+            <div className="font-display italic font-black text-6xl mt-1 leading-none">
+              {scoredCount}<span className="text-ink/40">/{teams.length || 0}</span>
+            </div>
+            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-ink/70">
+              teams scored
+            </div>
+          </div>
+          <div className="card-brut p-6">
+            <div className="eyebrow">REMAINING</div>
+            <div className="font-display italic font-black text-6xl mt-1 leading-none">
+              {Math.max(0, (teams.length || 0) - scoredCount)}
+            </div>
+            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-ink/70">
+              teams to score
+            </div>
+          </div>
+          <div className="card-brut p-6 bg-ink text-paper shadow-brut-amber">
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-paper/70">
+              CRITERIA
+            </div>
+            <div className="font-display italic font-black text-6xl mt-1 leading-none text-amber">
+              4
+            </div>
+            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-paper/70">
+              · 25 pts each · 100 max
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12 flex items-baseline justify-between flex-wrap gap-2">
+          <h2 className="font-display font-black text-3xl">TEAMS</h2>
+          <span className="font-mono text-[12px] uppercase tracking-wider text-ink/60">
+            Unscored first · click a card to grade
+          </span>
+        </div>
+
+        {error && (
+          <div className="mt-6 border-2 border-amber bg-amber-soft p-4 font-mono text-sm">
+            {error}
+          </div>
+        )}
+
+        {loading ? (
+          <div className="mt-10 font-mono text-sm uppercase tracking-[0.22em] text-ink/60">
+            Loading teams…
+          </div>
+        ) : sorted.length === 0 ? (
+          <div className="mt-10 border-2 border-dashed border-ink/40 p-10 text-center">
+            <div className="font-display italic font-black text-3xl">No teams yet.</div>
+            <p className="mt-2 text-ink/60 text-sm">
+              Teams will appear here as soon as they register.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {sorted.map((team, i) => {
+              const total = scores[team.id];
+              const scored = total != null;
+              return (
+                <Link
+                  key={team.id}
+                  to={`/judge/${team.id}`}
+                  className={`relative card-brut p-6 bg-paper transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a0a0a] ${
+                    scored ? 'bg-paper' : ''
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="font-mono text-[11px] tabular-nums tracking-wider text-ink/50">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    {scored ? (
+                      <span className="badge-mono bg-ink text-paper">
+                        SCORED · {total}/100
+                      </span>
+                    ) : (
+                      <span className="badge-mono border-amber text-amber">
+                        NOT SCORED
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="font-display font-black text-2xl mt-3 leading-tight">
+                    {team.team_name}
+                  </h3>
+                  <p className="mt-1 text-ink/80 line-clamp-2">{team.project_title}</p>
+                  <div className="mt-4 pt-4 border-t border-ink/20">
+                    <div className="eyebrow mb-1">Members</div>
+                    <p className="text-sm text-ink/70 line-clamp-2">{team.members}</p>
+                  </div>
+                  <div className="mt-4 flex items-center justify-end font-mono text-[12px] uppercase tracking-[0.18em] text-amber">
+                    {scored ? 'Adjust score' : 'Score now'} <IconArrow width="14" height="14" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </Layout>
+  );
+}
