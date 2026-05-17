@@ -74,7 +74,7 @@ function PodiumCard({ row, rank, size }) {
       </div>
       <div
         className={`font-display italic font-black leading-[0.78] mt-2 ${rankSize} ${
-          isOne ? 'text-amber' : 'text-ink'
+          isOne ? 'text-ieee' : 'text-ink'
         }`}
       >
         #{rank}
@@ -116,13 +116,13 @@ export default function Leaderboard() {
             <div className="eyebrow mb-3">PUBLIC · UPDATED EVERY 10s</div>
             <h1 className="font-display font-black text-6xl sm:text-8xl leading-[0.85]">
               LIVE<br />
-              <span className="italic text-amber">LEADERBOARD</span>
+              <span className="italic text-ieee">LEADERBOARD</span>
             </h1>
           </div>
           <div className="flex items-center gap-3 border-2 border-ink bg-paper px-4 py-2 shadow-brut-sm">
             <span className="relative inline-flex h-3 w-3">
-              <span className="absolute inset-0 rounded-full bg-amber animate-pulse-dot" />
-              <span className="relative inline-flex h-3 w-3 rounded-full bg-amber" />
+              <span className="absolute inset-0 rounded-full bg-ieee animate-pulse-dot" />
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-ieee" />
             </span>
             <span className="font-mono text-[11px] uppercase tracking-[0.2em]">
               LIVE · updates every 10s
@@ -134,7 +134,7 @@ export default function Leaderboard() {
         </div>
 
         {error && (
-          <div className="mt-8 border-2 border-amber bg-amber-soft p-4 font-mono text-sm">
+          <div className="mt-8 border-2 border-ieee bg-ieee-soft p-4 font-mono text-sm">
             {error}
           </div>
         )}
@@ -234,11 +234,11 @@ export default function Leaderboard() {
                     </td>
                     <td className="p-3 hidden sm:table-cell">{row.project_title}</td>
                     <td className="p-3 text-center">
-                      <span className="badge-mono border-amber text-amber">
+                      <span className="badge-mono border-ieee text-ieee">
                         {row.judges_scored}/{REQUIRED_JUDGES}
                       </span>
                     </td>
-                    <td className="p-3 text-right font-mono uppercase tracking-wider text-amber">
+                    <td className="p-3 text-right font-mono uppercase tracking-wider text-ieee">
                       PENDING
                     </td>
                   </tr>

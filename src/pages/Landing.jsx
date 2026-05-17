@@ -78,16 +78,17 @@ export default function Landing() {
           <div className="grid lg:grid-cols-12 gap-10 items-end">
             <div className="lg:col-span-8">
               <div className="eyebrow mb-6">
-                ISSUE №01 · DEMO DAY · 17 MAY 2026
+                <span className="text-ieee">IEEE</span> · <span className="text-petra">UNIVERSITY OF PETRA STUDENT BRANCH</span> PRESENTS · DEMO DAY 2026
               </div>
               <h1 className="font-display font-black tracking-[-0.03em] leading-[0.85] text-[16vw] sm:text-[14vw] lg:text-[10.5rem]">
                 BUILD.<br />SHIP.<br />
-                <span className="italic text-amber">JUDGE.</span>
+                <span className="italic text-ieee">JUDGE.</span>
               </h1>
               <p className="mt-8 max-w-xl text-lg sm:text-xl text-ink/80">
-                One day. One room. One leaderboard. Bring a team, bring a
-                build, leave with a verdict. We are not here for slide
-                decks — we are here for the moment the demo works.
+                One day. One room. One leaderboard. The IEEE UoP Student
+                Branch hackathon — bring a team, bring a build, leave with
+                a verdict. We are not here for slide decks; we are here
+                for the moment the demo works.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <Link to="/submit" className="btn-primary">
@@ -186,7 +187,7 @@ export default function Landing() {
           <div className="grid md:grid-cols-3 gap-6">
             {TRACKS.map((t) => (
               <div key={t.title} className="card-brut p-6 bg-paper flex flex-col">
-                <t.icon className="text-amber mb-4" />
+                <t.icon className="text-ieee mb-4" />
                 <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink/70">
                   Track
                 </div>
@@ -223,7 +224,7 @@ export default function Landing() {
                 <span className="font-mono font-bold text-2xl tabular-nums w-20 shrink-0">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <span className="font-mono text-amber font-bold text-2xl tabular-nums w-24 shrink-0">
+                <span className="font-mono text-ieee font-bold text-2xl tabular-nums w-24 shrink-0">
                   {time}
                 </span>
                 <span className="text-lg leading-snug">{label}</span>
@@ -243,11 +244,11 @@ export default function Landing() {
               </div>
               <h2 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
                 JUDGING<br />
-                <span className="italic text-amber">CRITERIA</span>
+                <span className="italic text-ieee">CRITERIA</span>
               </h2>
             </div>
             <div className="flex items-center gap-3 font-mono uppercase tracking-[0.18em] text-xs text-paper/70">
-              <IconBolt className="text-amber" /> 25 + 25 + 25 + 25 = 100
+              <IconBolt className="text-ieee" /> 25 + 25 + 25 + 25 = 100
             </div>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
@@ -260,7 +261,7 @@ export default function Landing() {
                   <div className="font-mono text-[12px] uppercase tracking-[0.22em] text-paper/70">
                     {c.n}
                   </div>
-                  <div className="font-display italic font-black text-amber text-5xl leading-none">
+                  <div className="font-display italic font-black text-ieee text-5xl leading-none">
                     {c.weight}
                     <span className="text-paper/60 text-2xl"> pts</span>
                   </div>
@@ -269,7 +270,7 @@ export default function Landing() {
                   {c.title}
                 </div>
                 <p className="mt-3 text-paper/80">{c.desc}</p>
-                <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-amber">
+                <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-ieee">
                   {c.look}
                 </p>
               </div>
@@ -282,7 +283,7 @@ export default function Landing() {
       <section className="section-rule">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-20 text-center">
           <h2 className="font-display font-black text-6xl sm:text-8xl leading-none">
-            STILL <span className="italic text-amber">HERE?</span>
+            STILL <span className="italic text-ieee">HERE?</span>
           </h2>
           <p className="mt-6 text-ink/70 max-w-xl mx-auto">
             Lock in your team, write a one-line project pitch, and we will

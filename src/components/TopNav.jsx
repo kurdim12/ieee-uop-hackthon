@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import Brand from './Brand.jsx';
 
 const PAGE_LABELS = {
   '/': 'INDEX',
@@ -39,12 +40,15 @@ export default function TopNav({ status }) {
 
   return (
     <header className="border-b-2 border-ink bg-paper sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-16 grid grid-cols-3 items-center gap-4">
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="font-display italic font-black text-2xl tracking-tight">
-            JUDGE<span className="text-amber">.</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 h-20 grid grid-cols-3 items-center gap-4">
+        <Link to="/" className="flex items-center gap-3 group">
+          <Brand size="sm" className="hidden md:inline-flex" />
+          <span className="md:hidden font-display italic font-black text-xl tracking-tight text-ieee">
+            IEEE <span className="text-petra">UoP</span>
           </span>
-          <span className="hidden sm:inline-flex badge-mono border-ink/30 text-ink/60">v1</span>
+          <span className="hidden lg:inline-flex font-display italic font-black text-xl tracking-tight border-l-2 border-ink/30 pl-3 ml-1">
+            JUDGE<span className="text-ieee">.</span>
+          </span>
         </Link>
         <div className="text-center">
           <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-ink/70">
@@ -53,7 +57,7 @@ export default function TopNav({ status }) {
         </div>
         <div className="flex items-center justify-end gap-3">
           {status && (
-            <span className="hidden md:inline-flex badge-mono bg-amber text-white border-ink">
+            <span className="hidden md:inline-flex badge-mono bg-ieee text-white border-ink">
               {status}
             </span>
           )}

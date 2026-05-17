@@ -4,13 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper: '#f4f0e6',
-        'paper-dark': '#ece6d4',
-        ink: '#0a0a0a',
-        amber: '#ff6b1a',
-        'amber-soft': '#ffe2cf',
-        moss: '#1f3d2b',
-        'moss-soft': '#d9e4dc',
+        paper: '#f6f8fb',
+        'paper-dark': '#e7ecf2',
+        ink: '#0a1a2f',
+        ieee: '#00629B',
+        'ieee-soft': '#dceaf3',
+        petra: '#a8242f',
+        'petra-soft': '#f3dee0',
+        moss: '#1f6e3a',
+        'moss-soft': '#d9e8de',
       },
       fontFamily: {
         display: ['Fraunces', 'Georgia', 'serif'],
@@ -18,10 +20,11 @@ export default {
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        brut: '6px 6px 0 0 #0a0a0a',
-        'brut-sm': '3px 3px 0 0 #0a0a0a',
-        'brut-amber': '6px 6px 0 0 #ff6b1a',
-        'brut-moss': '6px 6px 0 0 #1f3d2b',
+        brut: '6px 6px 0 0 #0a1a2f',
+        'brut-sm': '3px 3px 0 0 #0a1a2f',
+        'brut-ieee': '6px 6px 0 0 #00629B',
+        'brut-petra': '6px 6px 0 0 #a8242f',
+        'brut-moss': '6px 6px 0 0 #1f6e3a',
       },
       borderWidth: {
         3: '3px',

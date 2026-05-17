@@ -8,12 +8,12 @@
   }
   body {
     font-family: 'Inter Tight', system-ui, sans-serif;
-    background-color: #f4f0e6;
-    color: #0a0a0a;
+    background-color: #f6f8fb;
+    color: #0a1a2f;
     min-height: 100vh;
   }
   ::selection {
-    background-color: #ff6b1a;
+    background-color: #00629B;
     color: #fff;
   }
 }
@@ -23,22 +23,25 @@
     @apply border-2 border-ink bg-paper shadow-brut;
   }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-amber text-white font-sans font-bold uppercase tracking-wide px-6 py-3 shadow-brut transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a0a0a] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#0a0a0a] disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-brut;
+    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-ieee text-white font-sans font-bold uppercase tracking-wide px-6 py-3 shadow-brut transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a1a2f] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#0a1a2f] disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-brut;
+  }
+  .btn-petra {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-petra text-white font-sans font-bold uppercase tracking-wide px-6 py-3 shadow-brut transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a1a2f] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#0a1a2f] disabled:opacity-60 disabled:cursor-not-allowed;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-paper text-ink font-sans font-bold uppercase tracking-wide px-6 py-3 shadow-brut transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a0a0a] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#0a0a0a];
+    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-paper text-ink font-sans font-bold uppercase tracking-wide px-6 py-3 shadow-brut transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a1a2f] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#0a1a2f];
   }
   .btn-dark {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-ink text-paper font-sans font-bold uppercase tracking-wide px-6 py-3 shadow-brut-amber transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#ff6b1a] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#ff6b1a];
+    @apply inline-flex items-center justify-center gap-2 border-2 border-ink bg-ink text-paper font-sans font-bold uppercase tracking-wide px-6 py-3 shadow-brut-ieee transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#00629B] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_#00629B];
   }
   .input-line {
-    @apply w-full bg-transparent border-0 border-b-2 border-ink/70 focus:border-amber focus:outline-none px-0 py-3 text-lg font-sans placeholder:text-ink/40;
+    @apply w-full bg-transparent border-0 border-b-2 border-ink/70 focus:border-ieee focus:outline-none px-0 py-3 text-lg font-sans placeholder:text-ink/40;
   }
   .field-label {
     @apply block font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70 mb-1;
   }
   .field-error {
-    @apply font-mono text-[12px] uppercase tracking-wide text-amber mt-1;
+    @apply font-mono text-[12px] uppercase tracking-wide text-petra mt-1;
   }
   .badge-mono {
     @apply inline-flex items-center font-mono text-[11px] uppercase tracking-[0.16em] px-2 py-1 border-2 border-ink;
@@ -58,9 +61,9 @@
   inset: 0;
   pointer-events: none;
   z-index: 60;
-  opacity: 0.18;
+  opacity: 0.14;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
 /* Sliders — chunky brutalist */
@@ -74,38 +77,37 @@ input[type='range'].brut-slider {
 }
 input[type='range'].brut-slider::-webkit-slider-runnable-track {
   height: 14px;
-  background: #f4f0e6;
-  border: 2px solid #0a0a0a;
+  background: #f6f8fb;
+  border: 2px solid #0a1a2f;
 }
 input[type='range'].brut-slider::-moz-range-track {
   height: 14px;
-  background: #f4f0e6;
-  border: 2px solid #0a0a0a;
+  background: #f6f8fb;
+  border: 2px solid #0a1a2f;
 }
 input[type='range'].brut-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   height: 32px;
   width: 22px;
-  background: #ff6b1a;
-  border: 2px solid #0a0a0a;
+  background: #00629B;
+  border: 2px solid #0a1a2f;
   margin-top: -11px;
-  box-shadow: 3px 3px 0 0 #0a0a0a;
+  box-shadow: 3px 3px 0 0 #0a1a2f;
   border-radius: 0;
 }
 input[type='range'].brut-slider::-moz-range-thumb {
   height: 32px;
   width: 22px;
-  background: #ff6b1a;
-  border: 2px solid #0a0a0a;
-  box-shadow: 3px 3px 0 0 #0a0a0a;
+  background: #00629B;
+  border: 2px solid #0a1a2f;
+  box-shadow: 3px 3px 0 0 #0a1a2f;
   border-radius: 0;
 }
 input[type='range'].brut-slider:focus {
   outline: none;
 }
 
-/* Marquee duplication trick uses translate -50% */
 .marquee-track {
   display: inline-flex;
   white-space: nowrap;

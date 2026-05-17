@@ -52,7 +52,7 @@ export default function Login() {
             <div className="eyebrow">RESTRICTED</div>
             <h1 className="font-display font-black text-5xl sm:text-6xl mt-2 leading-none">
               JUDGE<br />
-              <span className="italic text-amber">LOGIN</span>
+              <span className="italic text-ieee">LOGIN</span>
             </h1>
             <p className="mt-4 text-ink/70 text-sm">
               Pre-seeded accounts only. No public sign-up.
@@ -87,7 +87,7 @@ export default function Login() {
             </div>
 
             {error && (
-              <div className="border-2 border-amber bg-amber-soft px-3 py-2 font-mono text-sm">
+              <div className="border-2 border-ieee bg-ieee-soft px-3 py-2 font-mono text-sm">
                 {error}
               </div>
             )}

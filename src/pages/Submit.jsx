@@ -102,7 +102,7 @@ export default function Submit() {
             <div className="eyebrow mb-4">IDEA RECEIVED</div>
             <div className="flex items-start gap-4">
               <IconCheck className="text-moss shrink-0 mt-2" width="56" height="56" strokeWidth="3" />
-              <h1 className="font-display italic font-black text-6xl sm:text-8xl text-amber leading-[0.9]">
+              <h1 className="font-display italic font-black text-6xl sm:text-8xl text-ieee leading-[0.9]">
                 SUBMITTED ✓
               </h1>
             </div>
@@ -122,7 +122,7 @@ export default function Submit() {
                 href={result.github_url}
                 target="_blank"
                 rel="noreferrer"
-                className="font-mono text-sm mt-1 break-all underline hover:text-amber"
+                className="font-mono text-sm mt-1 break-all underline hover:text-ieee"
               >
                 {result.github_url}
               </a>
@@ -154,7 +154,7 @@ export default function Submit() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 py-16">
         <div className="eyebrow mb-4">§ SUBMISSION FORM</div>
         <h1 className="font-display font-black text-6xl sm:text-7xl leading-[0.9]">
-          SUBMIT<br />YOUR <span className="italic text-amber">IDEA</span>
+          SUBMIT<br />YOUR <span className="italic text-ieee">IDEA</span>
         </h1>
         <p className="mt-5 text-lg text-ink/70 max-w-xl">
           One submission per team. Push your code to GitHub first — judges
@@ -219,7 +219,7 @@ export default function Submit() {
               </label>
               <span
                 className={`font-mono text-[11px] tabular-nums ${
-                  descCount > 500 || descCount < 50 ? 'text-amber' : 'text-ink/60'
+                  descCount > 500 || descCount < 50 ? 'text-ieee' : 'text-ink/60'
                 }`}
               >
                 {descCount} / 500
@@ -293,7 +293,7 @@ export default function Submit() {
           </div>
 
           {submitError && (
-            <div className="border-2 border-amber bg-amber-soft p-4 font-mono text-sm">
+            <div className="border-2 border-ieee bg-ieee-soft p-4 font-mono text-sm">
               {submitError}
             </div>
           )}

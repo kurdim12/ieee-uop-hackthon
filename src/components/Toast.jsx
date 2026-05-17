@@ -8,7 +8,7 @@ export default function Toast({ message, tone = 'moss', onDone, duration = 2400 
   }, [message, duration, onDone]);
 
   if (!message) return null;
-  const bg = tone === 'amber' ? 'bg-amber' : 'bg-moss';
+  const bg = tone === 'ieee' ? 'bg-ieee' : 'bg-moss';
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">

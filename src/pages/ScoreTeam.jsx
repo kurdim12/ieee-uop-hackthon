@@ -170,7 +170,7 @@ export default function ScoreTeam() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-10 pb-32">
         <Link
           to="/judge"
-          className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.2em] hover:text-amber"
+          className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.2em] hover:text-ieee"
         >
           <IconBack width="16" height="16" /> back to teams
         </Link>
@@ -180,7 +180,7 @@ export default function ScoreTeam() {
           <h1 className="font-display font-black text-4xl sm:text-6xl leading-[0.95]">
             {team.team_name}
           </h1>
-          <h2 className="mt-2 font-display italic text-2xl sm:text-3xl text-amber">
+          <h2 className="mt-2 font-display italic text-2xl sm:text-3xl text-ieee">
             {team.project_title}
           </h2>
           {team.github_url && (
@@ -188,7 +188,7 @@ export default function ScoreTeam() {
               href={team.github_url}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 inline-flex items-center font-mono text-[12px] uppercase tracking-[0.18em] underline hover:text-amber break-all"
+              className="mt-3 inline-flex items-center font-mono text-[12px] uppercase tracking-[0.18em] underline hover:text-ieee break-all"
             >
               open repository ↗ {team.github_url}
             </a>
@@ -220,7 +220,7 @@ export default function ScoreTeam() {
                 </div>
                 <div className="text-right">
                   <div className="eyebrow">CURRENT</div>
-                  <div className="font-display italic font-black text-7xl leading-none text-amber tabular-nums">
+                  <div className="font-display italic font-black text-7xl leading-none text-ieee tabular-nums">
                     {values[c.key]}
                   </div>
                 </div>
@@ -241,7 +241,7 @@ export default function ScoreTeam() {
                   min={0}
                   max={25}
                   step={1}
-                  className="w-20 border-2 border-ink bg-paper px-3 py-2 font-mono text-center text-lg tabular-nums focus:outline-none focus:bg-amber-soft"
+                  className="w-20 border-2 border-ink bg-paper px-3 py-2 font-mono text-center text-lg tabular-nums focus:outline-none focus:bg-ieee-soft"
                   value={values[c.key]}
                   onChange={(e) => setField(c.key, parseInt(e.target.value || '0', 10))}
                 />
@@ -260,7 +260,7 @@ export default function ScoreTeam() {
             <textarea
               id="notes"
               rows={4}
-              className="mt-2 w-full border-2 border-ink bg-paper p-3 font-mono text-sm focus:outline-none focus:bg-amber-soft"
+              className="mt-2 w-full border-2 border-ink bg-paper p-3 font-mono text-sm focus:outline-none focus:bg-ieee-soft"
               placeholder="Optional notes for organizers — not shown publicly."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -268,7 +268,7 @@ export default function ScoreTeam() {
           </div>
 
           {error && (
-            <div className="border-2 border-amber bg-amber-soft p-4 font-mono text-sm">
+            <div className="border-2 border-ieee bg-ieee-soft p-4 font-mono text-sm">
               {error}
             </div>
           )}

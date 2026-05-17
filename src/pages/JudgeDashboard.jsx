@@ -77,7 +77,7 @@ export default function JudgeDashboard() {
             <div className="eyebrow mb-3">JUDGE DESK</div>
             <h1 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
               WELCOME,<br />
-              <span className="italic text-amber">{judge.full_name}.</span>
+              <span className="italic text-ieee">{judge.full_name}.</span>
             </h1>
           </div>
           <button onClick={logout} className="btn-ghost">
@@ -104,11 +104,11 @@ export default function JudgeDashboard() {
               teams to score
             </div>
           </div>
-          <div className="card-brut p-6 bg-ink text-paper shadow-brut-amber">
+          <div className="card-brut p-6 bg-ink text-paper shadow-brut-ieee">
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-paper/70">
               CRITERIA
             </div>
-            <div className="font-display italic font-black text-6xl mt-1 leading-none text-amber">
+            <div className="font-display italic font-black text-6xl mt-1 leading-none text-ieee">
               4
             </div>
             <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-paper/70">
@@ -125,7 +125,7 @@ export default function JudgeDashboard() {
         </div>
 
         {error && (
-          <div className="mt-6 border-2 border-amber bg-amber-soft p-4 font-mono text-sm">
+          <div className="mt-6 border-2 border-ieee bg-ieee-soft p-4 font-mono text-sm">
             {error}
           </div>
         )}
@@ -163,7 +163,7 @@ export default function JudgeDashboard() {
                         SCORED · {total}/100
                       </span>
                     ) : (
-                      <span className="badge-mono border-amber text-amber">
+                      <span className="badge-mono border-ieee text-ieee">
                         NOT SCORED
                       </span>
                     )}
@@ -182,12 +182,12 @@ export default function JudgeDashboard() {
                       target="_blank"
                       rel="noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="mt-3 inline-flex items-center font-mono text-[11px] uppercase tracking-[0.18em] underline text-ink/70 hover:text-amber break-all"
+                      className="mt-3 inline-flex items-center font-mono text-[11px] uppercase tracking-[0.18em] underline text-ink/70 hover:text-ieee break-all"
                     >
                       open repo ↗
                     </a>
                   )}
-                  <div className="mt-4 flex items-center justify-end font-mono text-[12px] uppercase tracking-[0.18em] text-amber">
+                  <div className="mt-4 flex items-center justify-end font-mono text-[12px] uppercase tracking-[0.18em] text-ieee">
                     {scored ? 'Adjust score' : 'Score now'} <IconArrow width="14" height="14" />
                   </div>
                 </Link>

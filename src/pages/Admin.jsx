@@ -133,7 +133,7 @@ export default function Admin() {
             <div className="eyebrow mb-3">CONTROL ROOM · UPDATED EVERY 10s</div>
             <h1 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
               ADMIN<br />
-              <span className="italic text-amber">DASHBOARD</span>
+              <span className="italic text-ieee">DASHBOARD</span>
             </h1>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -162,7 +162,7 @@ export default function Admin() {
         </div>
 
         {error && (
-          <div className="mt-6 border-2 border-amber bg-amber-soft p-4 font-mono text-sm">
+          <div className="mt-6 border-2 border-ieee bg-ieee-soft p-4 font-mono text-sm">
             {error}
           </div>
         )}
@@ -198,7 +198,7 @@ export default function Admin() {
                       <>
                         <tr
                           key={row.id}
-                          className={`border-t border-ink/15 cursor-pointer hover:bg-amber-soft ${
+                          className={`border-t border-ink/15 cursor-pointer hover:bg-ieee-soft ${
                             i % 2 === 0 ? 'bg-paper' : 'bg-paper-dark'
                           }`}
                           onClick={() => setExpanded(isOpen ? null : row.id)}
@@ -219,7 +219,7 @@ export default function Admin() {
                               target="_blank"
                               rel="noreferrer"
                               onClick={(e) => e.stopPropagation()}
-                              className="font-mono text-xs underline hover:text-amber break-all"
+                              className="font-mono text-xs underline hover:text-ieee break-all"
                             >
                               repo ↗
                             </a>
@@ -229,7 +229,7 @@ export default function Admin() {
                               className={`badge-mono ${
                                 row.judges_scored >= totalJudges
                                   ? 'bg-moss text-white border-ink'
-                                  : 'border-amber text-amber'
+                                  : 'border-ieee text-ieee'
                               }`}
                             >
                               {row.judges_scored}/{totalJudges}
@@ -245,7 +245,7 @@ export default function Admin() {
                         {isOpen && (
                           <tr className="bg-paper-dark border-t border-ink/15">
                             <td colSpan={7} className="p-0">
-                              <div className="p-6 border-l-4 border-amber">
+                              <div className="p-6 border-l-4 border-ieee">
                                 <div className="grid lg:grid-cols-3 gap-6">
                                   <div className="border-2 border-ink p-4 bg-paper">
                                     <div className="eyebrow">MEMBERS</div>
@@ -340,7 +340,7 @@ export default function Admin() {
                                   href={row.github_url}
                                   target="_blank"
                                   rel="noreferrer"
-                                  className="mt-4 inline-flex items-center font-mono text-xs uppercase tracking-[0.2em] underline hover:text-amber"
+                                  className="mt-4 inline-flex items-center font-mono text-xs uppercase tracking-[0.2em] underline hover:text-ieee"
                                 >
                                   open repository ↗
                                 </a>
@@ -363,7 +363,7 @@ export default function Admin() {
 
 function Stat({ label, value, accent }) {
   return (
-    <div className={`card-brut p-5 ${accent ? 'bg-ink text-paper shadow-brut-amber' : ''}`}>
+    <div className={`card-brut p-5 ${accent ? 'bg-ink text-paper shadow-brut-ieee' : ''}`}>
       <div
         className={`font-mono text-[11px] uppercase tracking-[0.22em] ${
           accent ? 'text-paper/70' : 'text-ink/70'
@@ -373,7 +373,7 @@ function Stat({ label, value, accent }) {
       </div>
       <div
         className={`font-display italic font-black text-5xl mt-1 leading-none tabular-nums ${
-          accent ? 'text-amber' : 'text-ink'
+          accent ? 'text-ieee' : 'text-ink'
         }`}
       >
         {value}
