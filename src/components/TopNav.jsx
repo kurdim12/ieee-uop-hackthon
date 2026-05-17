@@ -1,22 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Brand from './Brand.jsx';
-
-const PAGE_LABELS = {
-  '/': 'INDEX',
-  '/submit': 'SUBMISSION',
-  '/register': 'SUBMISSION',
-  '/login': 'JUDGE LOGIN',
-  '/judge': 'JUDGE DESK',
-  '/leaderboard': 'LEADERBOARD',
-  '/admin': 'ADMIN',
-  '/admin/login': 'ADMIN LOGIN',
-};
-
-function getPageLabel(pathname) {
-  if (pathname.startsWith('/judge/')) return 'SCORING';
-  return PAGE_LABELS[pathname] ?? pathname.toUpperCase();
-}
+import { useT } from '../i18n/index.jsx';
 
 function useClock() {
   const [now, setNow] = useState(() => new Date());
@@ -30,13 +15,17 @@ function useClock() {
 export default function TopNav({ status }) {
   const { pathname } = useLocation();
   const now = useClock();
+  const { t, lang, setLang } = useT();
+
   const time = now.toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
   });
-  const label = getPageLabel(pathname);
+
+  const labels = t.nav.labels;
+  const label = pathname.startsWith('/judge/') ? labels['/judge/'] : (labels[pathname] ?? pathname.toUpperCase());
 
   return (
     <header className="border-b-2 border-ink bg-paper sticky top-0 z-40">
@@ -46,8 +35,8 @@ export default function TopNav({ status }) {
           <span className="md:hidden font-display italic font-black text-xl tracking-tight text-ieee">
             IEEE <span className="text-petra">UoP</span>
           </span>
-          <span className="hidden lg:inline-flex font-display italic font-black text-xl tracking-tight border-l-2 border-ink/30 pl-3 ml-1">
-            JUDGE<span className="text-ieee">.</span>
+          <span className="hidden lg:inline-flex font-display italic font-black text-xl tracking-tight border-l-2 border-ink/30 ltr:pl-3 rtl:pr-3 ltr:ml-1 rtl:mr-1">
+            {t.nav.platformDot.split('.')[0]}<span className="text-ieee">.</span>
           </span>
         </Link>
         <div className="text-center">
@@ -61,6 +50,14 @@ export default function TopNav({ status }) {
               {status}
             </span>
           )}
+          <button
+            onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}
+            className="badge-mono border-ink bg-paper hover:bg-ieee hover:text-white transition-colors"
+            aria-label="Switch language"
+            title={lang === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}
+          >
+            {t.langSwitch}
+          </button>
           <span className="font-mono text-[12px] tabular-nums tracking-wider">{time}</span>
         </div>
       </div>

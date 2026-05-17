@@ -4,8 +4,11 @@ import Layout from '../components/Layout.jsx';
 import { IconArrow } from '../components/Icons.jsx';
 import { supabase } from '../lib/supabase.js';
 import { setJudge } from '../lib/auth.js';
+import { useT } from '../i18n/index.jsx';
 
 export default function Login() {
+  const { t } = useT();
+  const L = t.login;
   const navigate = useNavigate();
   const location = useLocation();
   const redirectTo = location.state?.from || '/judge';
@@ -19,7 +22,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
     if (!username.trim() || !password) {
-      setError('Enter username and password.');
+      setError(L.fillBoth);
       return;
     }
     setSubmitting(true);
@@ -32,62 +35,47 @@ export default function Login() {
         .maybeSingle();
       if (queryError) throw queryError;
       if (!data) {
-        setError('Invalid credentials');
+        setError(L.invalidCredentials);
         return;
       }
       setJudge(data);
       navigate(redirectTo, { replace: true });
     } catch (err) {
-      setError(err?.message || 'Login failed. Try again.');
+      setError(err?.message || L.loginFailed);
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <Layout status="STAFF ONLY">
+    <Layout status={t.status.staffOnly}>
       <div className="min-h-[70vh] flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="eyebrow">RESTRICTED</div>
+            <div className="eyebrow">{L.eyebrow}</div>
             <h1 className="font-display font-black text-5xl sm:text-6xl mt-2 leading-none">
-              JUDGE<br />
-              <span className="italic text-ieee">LOGIN</span>
+              {L.titleA}<br />
+              <span className="italic text-ieee">{L.titleB}</span>
             </h1>
-            <p className="mt-4 text-ink/70 text-sm">
-              Pre-seeded accounts only. No public sign-up.
-            </p>
+            <p className="mt-4 text-ink/70 text-sm">{L.sub}</p>
           </div>
 
           <form onSubmit={onSubmit} className="card-brut p-8 bg-paper space-y-6">
             <div>
-              <label htmlFor="username" className="field-label">Username</label>
-              <input
-                id="username"
-                type="text"
-                autoComplete="username"
-                className="input-line"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                disabled={submitting}
-                autoFocus
-              />
+              <label htmlFor="username" className="field-label">{L.username}</label>
+              <input id="username" type="text" autoComplete="username" className="input-line"
+                     value={username} onChange={(e) => setUsername(e.target.value)}
+                     disabled={submitting} autoFocus dir="ltr" />
             </div>
             <div>
-              <label htmlFor="password" className="field-label">Password</label>
-              <input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                className="input-line"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                disabled={submitting}
-              />
+              <label htmlFor="password" className="field-label">{L.password}</label>
+              <input id="password" type="password" autoComplete="current-password" className="input-line"
+                     value={password} onChange={(e) => setPassword(e.target.value)}
+                     disabled={submitting} dir="ltr" />
             </div>
 
             {error && (
-              <div className="border-2 border-ieee bg-ieee-soft px-3 py-2 font-mono text-sm">
+              <div className="border-2 border-petra bg-petra-soft px-3 py-2 font-mono text-sm">
                 {error}
               </div>
             )}
@@ -96,21 +84,18 @@ export default function Login() {
               {submitting ? (
                 <>
                   <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent animate-spin" />
-                  SIGNING IN…
+                  {L.signingInBtn}
                 </>
               ) : (
                 <>
-                  SIGN IN <IconArrow width="20" height="20" />
+                  {L.signInBtn} <IconArrow width="20" height="20" />
                 </>
               )}
             </button>
 
             <div className="text-center pt-2">
-              <Link
-                to="/"
-                className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/60 hover:text-ink underline"
-              >
-                ← back to home
+              <Link to="/" className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/60 hover:text-ink underline">
+                {L.backLink}
               </Link>
             </div>
           </form>

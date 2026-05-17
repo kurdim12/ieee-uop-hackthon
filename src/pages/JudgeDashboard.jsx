@@ -4,31 +4,11 @@ import Layout from '../components/Layout.jsx';
 import { IconLogout, IconArrow } from '../components/Icons.jsx';
 import { supabase } from '../lib/supabase.js';
 import { getJudge, clearJudge } from '../lib/auth.js';
-
-const CRITERIA = [
-  {
-    n: '01',
-    title: 'INNOVATION & ORIGINALITY',
-    desc: 'Is the idea novel? Does it solve a real problem in a fresh way?',
-  },
-  {
-    n: '02',
-    title: 'TECHNICAL EXECUTION',
-    desc: 'Quality of build, working demo, technical depth.',
-  },
-  {
-    n: '03',
-    title: 'PRESENTATION & COMMUNICATION',
-    desc: 'Clarity of pitch, demo flow, ability to explain.',
-  },
-  {
-    n: '04',
-    title: 'IMPACT & FEASIBILITY',
-    desc: 'Real-world potential, scalability, viability.',
-  },
-];
+import { useT } from '../i18n/index.jsx';
 
 export default function JudgeDashboard() {
+  const { t } = useT();
+  const J = t.judge;
   const navigate = useNavigate();
   const judge = getJudge();
   const [teams, setTeams] = useState([]);
@@ -57,21 +37,17 @@ export default function JudgeDashboard() {
         if (cancelled) return;
         setTeams(tData || []);
         const map = {};
-        (sData || []).forEach((s) => {
-          map[s.team_id] = s.total;
-        });
+        (sData || []).forEach((s) => { map[s.team_id] = s.total; });
         setScores(map);
       } catch (err) {
-        if (!cancelled) setError(err?.message || 'Failed to load teams.');
+        if (!cancelled) setError(err?.message || J.loadFailed);
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
     load();
-    return () => {
-      cancelled = true;
-    };
-  }, [judge.id]);
+    return () => { cancelled = true; };
+  }, [judge.id, J.loadFailed]);
 
   const sorted = useMemo(() => {
     return [...teams].sort((a, b) => {
@@ -83,7 +59,7 @@ export default function JudgeDashboard() {
   }, [teams, scores]);
 
   const scoredCount = useMemo(
-    () => teams.filter((t) => scores[t.id] != null).length,
+    () => teams.filter((tm) => scores[tm.id] != null).length,
     [teams, scores]
   );
 
@@ -92,50 +68,52 @@ export default function JudgeDashboard() {
     navigate('/login', { replace: true });
   }
 
+  const rubricItems = t.landing.criteria.items;
+
   return (
-    <Layout status={`SIGNED IN · ${judge.username.toUpperCase()}`}>
+    <Layout status={`${t.status.signedInPrefix} · ${judge.username.toUpperCase()}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-12">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <div className="eyebrow mb-3">JUDGE DESK</div>
+            <div className="eyebrow mb-3">{J.eyebrow}</div>
             <h1 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
-              WELCOME,<br />
+              {J.welcome}<br />
               <span className="italic text-ieee">{judge.full_name}.</span>
             </h1>
           </div>
           <button onClick={logout} className="btn-ghost">
-            <IconLogout width="20" height="20" /> LOG OUT
+            <IconLogout width="20" height="20" /> {J.logoutBtn}
           </button>
         </div>
 
         <div className="mt-10 grid md:grid-cols-3 gap-4">
           <div className="card-brut p-6">
-            <div className="eyebrow">PROGRESS</div>
+            <div className="eyebrow">{J.progress}</div>
             <div className="font-display italic font-black text-6xl mt-1 leading-none">
               {scoredCount}<span className="text-ink/40">/{teams.length || 0}</span>
             </div>
             <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-ink/70">
-              teams scored
+              {J.teamsScored}
             </div>
           </div>
           <div className="card-brut p-6">
-            <div className="eyebrow">REMAINING</div>
+            <div className="eyebrow">{J.remaining}</div>
             <div className="font-display italic font-black text-6xl mt-1 leading-none">
               {Math.max(0, (teams.length || 0) - scoredCount)}
             </div>
             <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-ink/70">
-              teams to score
+              {J.teamsToScore}
             </div>
           </div>
           <div className="card-brut p-6 bg-ink text-paper shadow-brut-ieee">
             <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-paper/70">
-              CRITERIA
+              {J.criteria}
             </div>
             <div className="font-display italic font-black text-6xl mt-1 leading-none text-ieee">
               4
             </div>
             <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-paper/70">
-              · 25 pts each · 100 max
+              {J.criteriaSub}
             </div>
           </div>
         </div>
@@ -143,22 +121,22 @@ export default function JudgeDashboard() {
         <div className="mt-12">
           <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
             <h2 className="font-display font-black text-3xl">
-              JUDGING <span className="italic text-ieee">RUBRIC</span>
+              {J.rubricTitleA} <span className="italic text-ieee">{J.rubricTitleB}</span>
             </h2>
             <span className="font-mono text-[12px] uppercase tracking-wider text-ink/60">
-              0 – 25 each · 100 total
+              {J.rubricSub}
             </span>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {CRITERIA.map((c) => (
+            {rubricItems.map((c) => (
               <div key={c.n} className="card-brut bg-paper p-5">
                 <div className="flex items-baseline justify-between">
                   <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink/60">
                     {c.n}
                   </span>
                   <span className="font-display italic font-black text-3xl text-ieee tabular-nums leading-none">
-                    25
-                    <span className="text-ink/40 text-sm"> pts</span>
+                    {J.pts}
+                    <span className="text-ink/40 text-sm"> {J.ptsUnit}</span>
                   </span>
                 </div>
                 <h3 className="mt-2 font-display font-black text-lg leading-tight">
@@ -171,28 +149,26 @@ export default function JudgeDashboard() {
         </div>
 
         <div className="mt-12 flex items-baseline justify-between flex-wrap gap-2">
-          <h2 className="font-display font-black text-3xl">TEAMS</h2>
+          <h2 className="font-display font-black text-3xl">{J.teamsTitle}</h2>
           <span className="font-mono text-[12px] uppercase tracking-wider text-ink/60">
-            Unscored first · click a card to grade
+            {J.teamsHint}
           </span>
         </div>
 
         {error && (
-          <div className="mt-6 border-2 border-ieee bg-ieee-soft p-4 font-mono text-sm">
+          <div className="mt-6 border-2 border-petra bg-petra-soft p-4 font-mono text-sm">
             {error}
           </div>
         )}
 
         {loading ? (
           <div className="mt-10 font-mono text-sm uppercase tracking-[0.22em] text-ink/60">
-            Loading teams…
+            {J.loadingTeams}
           </div>
         ) : sorted.length === 0 ? (
           <div className="mt-10 border-2 border-dashed border-ink/40 p-10 text-center">
-            <div className="font-display italic font-black text-3xl">No teams yet.</div>
-            <p className="mt-2 text-ink/60 text-sm">
-              Teams will appear here as soon as they register.
-            </p>
+            <div className="font-display italic font-black text-3xl">{J.noTeams}</div>
+            <p className="mt-2 text-ink/60 text-sm">{J.noTeamsSub}</p>
           </div>
         ) : (
           <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -203,9 +179,7 @@ export default function JudgeDashboard() {
                 <Link
                   key={team.id}
                   to={`/judge/${team.id}`}
-                  className={`relative card-brut p-6 bg-paper transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a0a0a] ${
-                    scored ? 'bg-paper' : ''
-                  }`}
+                  className="relative card-brut p-6 bg-paper transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a1a2f]"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <span className="font-mono text-[11px] tabular-nums tracking-wider text-ink/50">
@@ -213,11 +187,11 @@ export default function JudgeDashboard() {
                     </span>
                     {scored ? (
                       <span className="badge-mono bg-ink text-paper">
-                        SCORED · {total}/100
+                        {J.statusScored} · {total}/100
                       </span>
                     ) : (
                       <span className="badge-mono border-ieee text-ieee">
-                        NOT SCORED
+                        {J.statusNotScored}
                       </span>
                     )}
                   </div>
@@ -226,7 +200,7 @@ export default function JudgeDashboard() {
                   </h3>
                   <p className="mt-1 text-ink/80 line-clamp-2">{team.project_title}</p>
                   <div className="mt-4 pt-4 border-t border-ink/20">
-                    <div className="eyebrow mb-1">Members</div>
+                    <div className="eyebrow mb-1">{J.membersLabel}</div>
                     <p className="text-sm text-ink/70 line-clamp-2">{team.members}</p>
                   </div>
                   {team.github_url && (
@@ -237,11 +211,11 @@ export default function JudgeDashboard() {
                       onClick={(e) => e.stopPropagation()}
                       className="mt-3 inline-flex items-center font-mono text-[11px] uppercase tracking-[0.18em] underline text-ink/70 hover:text-ieee break-all"
                     >
-                      open repo ↗
+                      {J.openRepo}
                     </a>
                   )}
                   <div className="mt-4 flex items-center justify-end font-mono text-[12px] uppercase tracking-[0.18em] text-ieee">
-                    {scored ? 'Adjust score' : 'Score now'} <IconArrow width="14" height="14" />
+                    {scored ? J.adjustScore : J.scoreNow} <IconArrow width="14" height="14" />
                   </div>
                 </Link>
               );
