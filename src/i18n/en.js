@@ -306,6 +306,7 @@ export default {
     totalLabel: 'Total',
     judgesLabel: 'judges',
     loadFailed: 'Could not load leaderboard.',
+    lockedSub: 'The leaderboard is locked until judging is complete. Winners will be announced on the main stage.',
   },
 
   admin: {

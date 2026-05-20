@@ -32,9 +32,6 @@ export default function Landing() {
                 <Link to="/submit" className="btn-primary">
                   {L.ctaSubmit} <IconArrow width="20" height="20" />
                 </Link>
-                <Link to="/leaderboard" className="btn-ghost">
-                  {L.ctaLeaderboard}
-                </Link>
               </div>
             </div>
             <div className="lg:col-span-4">

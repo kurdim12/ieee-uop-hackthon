@@ -133,9 +133,8 @@ export default function Submit() {
             </div>
             <p className="mt-6 text-ink/70">{SS.body}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/" className="btn-ghost">{SS.backHome}</Link>
-              <Link to="/leaderboard" className="btn-primary">
-                {SS.viewLeaderboard} <IconArrow width="20" height="20" />
+              <Link to="/" className="btn-primary">
+                {SS.backHome} <IconArrow width="20" height="20" />
               </Link>
             </div>
           </div>
