@@ -130,42 +130,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* JUDGING CRITERIA */}
-      <section className="section-rule bg-gradient-to-b from-ieee-50/60 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-20">
-          <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
-            <div>
-              <div className="badge-mono mb-3">{L.criteria.eyebrow}</div>
-              <h2 className="font-display font-extrabold text-4xl sm:text-6xl leading-tight text-slate-900 tracking-tight">
-                {L.criteria.titleA}{' '}
-                <span className="text-ieee">{L.criteria.titleB}</span>
-              </h2>
-            </div>
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-500">
-              <IconBolt className="text-accent" width="20" height="20" /> {L.criteria.formula}
-            </div>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {L.criteria.items.map((c) => (
-              <div key={c.n} className="card-brut">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="badge-mono">{c.n}</div>
-                  <div className="font-display font-extrabold text-4xl leading-none tracking-tight text-ieee">
-                    25
-                    <span className="text-slate-400 text-base font-semibold"> {L.criteria.ptsLabel}</span>
-                  </div>
-                </div>
-                <h3 className="mt-4 font-display font-bold text-2xl leading-tight text-slate-900">
-                  {c.title}
-                </h3>
-                <p className="mt-3 text-slate-600 leading-relaxed">{c.desc}</p>
-                <p className="mt-4 text-sm font-semibold text-ieee">{c.look}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="section-rule">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-20 text-center">
