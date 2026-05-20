@@ -93,7 +93,7 @@ export default function JudgeDashboard() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="eyebrow mb-3">{J.eyebrow}</div>
-            <h1 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
+            <h1 className="font-display font-extrabold text-5xl sm:text-7xl leading-[0.9]">
               {J.welcome}<br />
               <span className="italic text-ieee">{judge.full_name}.</span>
             </h1>
@@ -106,30 +106,30 @@ export default function JudgeDashboard() {
         <div className="mt-10 grid md:grid-cols-3 gap-4">
           <div className="card-brut p-6">
             <div className="eyebrow">{J.progress}</div>
-            <div className="font-display italic font-black text-6xl mt-1 leading-none">
-              {scoredCount}<span className="text-ink/40">/{teams.length || 0}</span>
+            <div className="font-display font-extrabold text-6xl mt-1 leading-none">
+              {scoredCount}<span className="text-slate-400">/{teams.length || 0}</span>
             </div>
-            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-ink/70">
+            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-slate-500">
               {J.teamsScored}
             </div>
           </div>
           <div className="card-brut p-6">
             <div className="eyebrow">{J.remaining}</div>
-            <div className="font-display italic font-black text-6xl mt-1 leading-none">
+            <div className="font-display font-extrabold text-6xl mt-1 leading-none">
               {Math.max(0, (teams.length || 0) - scoredCount)}
             </div>
-            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-ink/70">
+            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-slate-500">
               {J.teamsToScore}
             </div>
           </div>
-          <div className="card-brut p-6 bg-ink text-paper shadow-brut-ieee">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-paper/70">
+          <div className="card-brut p-6 bg-slate-900 text-white shadow-card">
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/80">
               {J.criteria}
             </div>
-            <div className="font-display italic font-black text-6xl mt-1 leading-none text-ieee">
+            <div className="font-display font-extrabold text-6xl mt-1 leading-none text-ieee">
               4
             </div>
-            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-paper/70">
+            <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-white/80">
               {J.criteriaSub}
             </div>
           </div>
@@ -137,55 +137,55 @@ export default function JudgeDashboard() {
 
         <div className="mt-12">
           <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
-            <h2 className="font-display font-black text-3xl">
+            <h2 className="font-display font-extrabold text-3xl">
               {J.rubricTitleA} <span className="italic text-ieee">{J.rubricTitleB}</span>
             </h2>
-            <span className="font-mono text-[12px] uppercase tracking-wider text-ink/60">
+            <span className="font-mono text-[12px] uppercase tracking-wider text-slate-500">
               {J.rubricSub}
             </span>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {rubricItems.map((c) => (
-              <div key={c.n} className="card-brut bg-paper p-5">
+              <div key={c.n} className="card-brut bg-white p-5">
                 <div className="flex items-baseline justify-between">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink/60">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-500">
                     {c.n}
                   </span>
-                  <span className="font-display italic font-black text-3xl text-ieee tabular-nums leading-none">
+                  <span className="font-display font-extrabold text-3xl text-ieee tabular-nums leading-none">
                     {J.pts}
-                    <span className="text-ink/40 text-sm"> {J.ptsUnit}</span>
+                    <span className="text-slate-400 text-sm"> {J.ptsUnit}</span>
                   </span>
                 </div>
-                <h3 className="mt-2 font-display font-black text-lg leading-tight">
+                <h3 className="mt-2 font-display font-extrabold text-lg leading-tight">
                   {c.title}
                 </h3>
-                <p className="mt-2 text-xs text-ink/70 leading-snug">{c.desc}</p>
+                <p className="mt-2 text-xs text-slate-500 leading-snug">{c.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         <div className="mt-12 flex items-baseline justify-between flex-wrap gap-2">
-          <h2 className="font-display font-black text-3xl">{J.teamsTitle}</h2>
-          <span className="font-mono text-[12px] uppercase tracking-wider text-ink/60">
+          <h2 className="font-display font-extrabold text-3xl">{J.teamsTitle}</h2>
+          <span className="font-mono text-[12px] uppercase tracking-wider text-slate-500">
             {J.teamsHint}
           </span>
         </div>
 
         {error && (
-          <div className="mt-6 border-2 border-petra bg-petra-soft p-4 font-mono text-sm">
+          <div className="mt-6 border border-red-200 bg-red-50 p-4 font-mono text-sm">
             {error}
           </div>
         )}
 
         {loading ? (
-          <div className="mt-10 font-mono text-sm uppercase tracking-[0.22em] text-ink/60">
+          <div className="mt-10 font-mono text-sm uppercase tracking-[0.22em] text-slate-500">
             {J.loadingTeams}
           </div>
         ) : sorted.length === 0 ? (
-          <div className="mt-10 border-2 border-dashed border-ink/40 p-10 text-center">
-            <div className="font-display italic font-black text-3xl">{J.noTeams}</div>
-            <p className="mt-2 text-ink/60 text-sm">{J.noTeamsSub}</p>
+          <div className="mt-10 border-2 border-dashed border-slate-200 rounded-2xl p-10 text-center">
+            <div className="font-display font-extrabold text-3xl">{J.noTeams}</div>
+            <p className="mt-2 text-slate-500 text-sm">{J.noTeamsSub}</p>
           </div>
         ) : (
           <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -196,14 +196,14 @@ export default function JudgeDashboard() {
                 <Link
                   key={team.id}
                   to={`/judge/${team.id}`}
-                  className="relative card-brut p-6 bg-paper transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a1a2f]"
+                  className="relative card-brut p-6 bg-white transition-transform hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0_0_#0a1a2f]"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <span className="font-mono text-[11px] tabular-nums tracking-wider text-ink/50">
+                    <span className="font-mono text-[11px] tabular-nums tracking-wider text-slate-400">
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     {scored ? (
-                      <span className="badge-mono bg-ink text-paper">
+                      <span className="badge-mono bg-slate-900 text-white">
                         {J.statusScored} · {total}/100
                       </span>
                     ) : (
@@ -212,13 +212,13 @@ export default function JudgeDashboard() {
                       </span>
                     )}
                   </div>
-                  <h3 className="font-display font-black text-2xl mt-3 leading-tight">
+                  <h3 className="font-display font-extrabold text-2xl mt-3 leading-tight">
                     {team.team_name}
                   </h3>
-                  <p className="mt-1 text-ink/80 line-clamp-2">{team.project_title}</p>
-                  <div className="mt-4 pt-4 border-t border-ink/20">
+                  <p className="mt-1 text-slate-600 line-clamp-2">{team.project_title}</p>
+                  <div className="mt-4 pt-4 border-t border-slate-100">
                     <div className="eyebrow mb-1">{J.membersLabel}</div>
-                    <p className="text-sm text-ink/70 line-clamp-2">{team.members}</p>
+                    <p className="text-sm text-slate-500 line-clamp-2">{team.members}</p>
                   </div>
                   {team.github_url && (
                     <a
@@ -226,7 +226,7 @@ export default function JudgeDashboard() {
                       target="_blank"
                       rel="noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="mt-3 inline-flex items-center font-mono text-[11px] uppercase tracking-[0.18em] underline text-ink/70 hover:text-ieee break-all"
+                      className="mt-3 inline-flex items-center font-mono text-[11px] uppercase tracking-[0.18em] underline text-slate-500 hover:text-ieee break-all"
                     >
                       {J.openRepo}
                     </a>
@@ -235,7 +235,7 @@ export default function JudgeDashboard() {
                     <button
                       type="button"
                       onClick={(e) => { e.preventDefault(); e.stopPropagation(); deleteTeam(team); }}
-                      className="inline-flex items-center font-mono font-bold text-[10px] uppercase tracking-[0.18em] border-2 border-petra text-petra px-2 py-1 hover:bg-petra hover:text-white transition-colors"
+                      className="inline-flex items-center font-mono font-bold text-[10px] uppercase tracking-[0.18em] border border-red-200 text-petra px-2 py-1 hover:bg-petra hover:text-white transition-colors"
                     >
                       {J.deleteBtn || 'DELETE'}
                     </button>

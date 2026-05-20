@@ -128,7 +128,7 @@ export default function Admin() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <div className="eyebrow mb-3">{A.eyebrow}</div>
-            <h1 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
+            <h1 className="font-display font-extrabold text-5xl sm:text-7xl leading-[0.9]">
               {A.titleA}<br />
               <span className="italic text-ieee">{A.titleB}</span>
             </h1>
@@ -150,26 +150,26 @@ export default function Admin() {
           <Stat label={A.stats.scoresSubmitted} value={stats.totalScoresSubmitted} />
         </div>
 
-        <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-ink/60">
+        <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500">
           {A.lastRefresh} · {updatedLabel}
         </div>
 
         {error && (
-          <div className="mt-6 border-2 border-petra bg-petra-soft p-4 font-mono text-sm">{error}</div>
+          <div className="mt-6 border border-red-200 bg-red-50 p-4 font-mono text-sm">{error}</div>
         )}
 
         <div className="mt-10">
-          <h2 className="font-display font-black text-3xl mb-4">{A.submissionsTitle}</h2>
+          <h2 className="font-display font-extrabold text-3xl mb-4">{A.submissionsTitle}</h2>
           {loading && teams.length === 0 ? (
-            <div className="font-mono text-sm uppercase tracking-[0.22em] text-ink/60">{A.loading}</div>
+            <div className="font-mono text-sm uppercase tracking-[0.22em] text-slate-500">{A.loading}</div>
           ) : sorted.length === 0 ? (
-            <div className="border-2 border-dashed border-ink/40 p-10 text-center">
-              <div className="font-display italic font-black text-3xl">{A.noSubmissions}</div>
+            <div className="border-2 border-dashed border-slate-200 rounded-2xl p-10 text-center">
+              <div className="font-display font-extrabold text-3xl">{A.noSubmissions}</div>
             </div>
           ) : (
             <div className="card-brut overflow-x-auto">
               <table className="w-full text-left border-collapse">
-                <thead className="bg-ink text-paper">
+                <thead className="bg-slate-900 text-white">
                   <tr className="font-mono uppercase tracking-[0.18em] text-[11px]">
                     <th className="p-3 w-10"></th>
                     <th className="p-3">{A.cols.team}</th>
@@ -186,17 +186,17 @@ export default function Admin() {
                     return (
                       <Fragment key={row.id}>
                         <tr
-                          className={`border-t border-ink/15 cursor-pointer hover:bg-ieee-soft ${
-                            i % 2 === 0 ? 'bg-paper' : 'bg-paper-dark'
+                          className={`border-t border-slate-100 cursor-pointer hover:bg-ieee-soft ${
+                            i % 2 === 0 ? 'bg-white' : 'bg-slate-50'
                           }`}
                           onClick={() => setExpanded(isOpen ? null : row.id)}
                         >
-                          <td className="p-3 text-center font-mono text-ink/40">{isOpen ? '−' : '+'}</td>
+                          <td className="p-3 text-center font-mono text-slate-400">{isOpen ? '−' : '+'}</td>
                           <td className="p-3">
-                            <div className="font-display font-black text-xl">{row.team_name}</div>
-                            <div className="md:hidden text-ink/70 text-sm">{row.project_title}</div>
+                            <div className="font-display font-extrabold text-xl">{row.team_name}</div>
+                            <div className="md:hidden text-slate-500 text-sm">{row.project_title}</div>
                           </td>
-                          <td className="p-3 hidden md:table-cell text-ink/80">{row.project_title}</td>
+                          <td className="p-3 hidden md:table-cell text-slate-600">{row.project_title}</td>
                           <td className="p-3 hidden lg:table-cell">
                             <a
                               href={row.github_url}
@@ -209,32 +209,32 @@ export default function Admin() {
                             </a>
                           </td>
                           <td className="p-3 text-center">
-                            <span className={`badge-mono ${row.judges_scored >= totalJudges ? 'bg-moss text-white border-ink' : 'border-ieee text-ieee'}`}>
+                            <span className={`badge-mono ${row.judges_scored >= totalJudges ? 'bg-moss text-white border-slate-200' : 'border-ieee text-ieee'}`}>
                               {row.judges_scored}/{totalJudges}
                             </span>
                           </td>
                           <td className="p-3 text-right font-mono font-bold tabular-nums text-xl">{row.total_score}</td>
-                          <td className="p-3 text-right font-mono tabular-nums text-ink/70">
+                          <td className="p-3 text-right font-mono tabular-nums text-slate-500">
                             {row.judges_scored ? row.avg_score : '—'}
                           </td>
                         </tr>
                         {isOpen && (
-                          <tr className="bg-paper-dark border-t border-ink/15">
+                          <tr className="bg-slate-50 border-t border-slate-100">
                             <td colSpan={7} className="p-0">
                               <div className="p-6 border-l-4 border-ieee">
                                 <div className="grid lg:grid-cols-3 gap-6">
-                                  <div className="border-2 border-ink p-4 bg-paper">
+                                  <div className="rounded-xl border border-slate-200 p-4 bg-white">
                                     <div className="eyebrow">{A.expanded.members}</div>
                                     <p className="mt-2 text-sm">{row.members}</p>
                                   </div>
-                                  <div className="border-2 border-ink p-4 bg-paper">
+                                  <div className="rounded-xl border border-slate-200 p-4 bg-white">
                                     <div className="eyebrow">{A.expanded.contact}</div>
                                     <p className="mt-2 text-sm break-all">{row.contact_email}</p>
                                     {row.contact_phone && (
                                       <p className="text-sm font-mono mt-1">{row.contact_phone}</p>
                                     )}
                                   </div>
-                                  <div className="border-2 border-ink p-4 bg-paper">
+                                  <div className="rounded-xl border border-slate-200 p-4 bg-white">
                                     <div className="eyebrow">{A.expanded.submitted}</div>
                                     <p className="mt-2 font-mono text-sm">
                                       {new Date(row.created_at).toLocaleString()}
@@ -242,20 +242,20 @@ export default function Admin() {
                                   </div>
                                 </div>
 
-                                <div className="mt-4 border-2 border-ink p-4 bg-paper">
+                                <div className="mt-4 rounded-xl border border-slate-200 p-4 bg-white">
                                   <div className="eyebrow">{A.expanded.theIdea}</div>
                                   <p className="mt-2 whitespace-pre-line">{row.project_desc}</p>
                                 </div>
 
-                                <div className="mt-4 border-2 border-ink p-4 bg-paper">
+                                <div className="mt-4 rounded-xl border border-slate-200 p-4 bg-white">
                                   <div className="eyebrow mb-3">{A.expanded.judgeBreakdown}</div>
                                   {judges.length === 0 ? (
-                                    <p className="text-sm text-ink/60">{A.noJudges}</p>
+                                    <p className="text-sm text-slate-500">{A.noJudges}</p>
                                   ) : (
                                     <div className="overflow-x-auto">
                                       <table className="w-full text-left text-sm">
                                         <thead>
-                                          <tr className="font-mono uppercase tracking-wider text-[10px] text-ink/60">
+                                          <tr className="font-mono uppercase tracking-wider text-[10px] text-slate-500">
                                             <th className="py-1 pr-3">{A.expanded.cols.judge}</th>
                                             <th className="py-1 pr-3 text-right">{A.expanded.cols.innov}</th>
                                             <th className="py-1 pr-3 text-right">{A.expanded.cols.exec}</th>
@@ -270,23 +270,23 @@ export default function Admin() {
                                             const sc = row.scores_by_judge.find((x) => x.judge_id === j.id);
                                             if (!sc) {
                                               return (
-                                                <tr key={j.id} className="border-t border-ink/10">
+                                                <tr key={j.id} className="border-t border-slate-200/10">
                                                   <td className="py-2 pr-3 font-mono text-xs">{j.username}</td>
-                                                  <td colSpan={6} className="py-2 text-ink/40 italic">
+                                                  <td colSpan={6} className="py-2 text-slate-400 italic">
                                                     {A.expanded.notScoredYet}
                                                   </td>
                                                 </tr>
                                               );
                                             }
                                             return (
-                                              <tr key={j.id} className="border-t border-ink/10">
+                                              <tr key={j.id} className="border-t border-slate-200/10">
                                                 <td className="py-2 pr-3 font-mono text-xs">{j.username}</td>
                                                 <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.innovation}</td>
                                                 <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.execution}</td>
                                                 <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.presentation}</td>
                                                 <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.impact}</td>
                                                 <td className="py-2 pr-3 text-right font-mono font-bold tabular-nums">{sc.total}</td>
-                                                <td className="py-2 pl-3 text-ink/70 text-xs italic max-w-md">
+                                                <td className="py-2 pl-3 text-slate-500 text-xs italic max-w-md">
                                                   {sc.notes || '—'}
                                                 </td>
                                               </tr>
@@ -325,11 +325,11 @@ export default function Admin() {
 
 function Stat({ label, value, accent }) {
   return (
-    <div className={`card-brut p-5 ${accent ? 'bg-ink text-paper shadow-brut-ieee' : ''}`}>
-      <div className={`font-mono text-[11px] uppercase tracking-[0.22em] ${accent ? 'text-paper/70' : 'text-ink/70'}`}>
+    <div className={`card-brut p-5 ${accent ? 'bg-slate-900 text-white shadow-card' : ''}`}>
+      <div className={`font-mono text-[11px] uppercase tracking-[0.22em] ${accent ? 'text-white/80' : 'text-slate-500'}`}>
         {label}
       </div>
-      <div className={`font-display italic font-black text-5xl mt-1 leading-none tabular-nums ${accent ? 'text-ieee' : 'text-ink'}`}>
+      <div className={`font-display font-extrabold text-5xl mt-1 leading-none tabular-nums ${accent ? 'text-ieee' : 'text-ink'}`}>
         {value}
       </div>
     </div>

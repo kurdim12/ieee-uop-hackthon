@@ -22,12 +22,12 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-16 pb-20">
           <div className="grid lg:grid-cols-12 gap-10 items-end">
             <div className="lg:col-span-8">
-              <div className="eyebrow mb-6">{L.eyebrow}</div>
-              <h1 className="font-display font-black tracking-[-0.03em] leading-[0.85] text-[16vw] sm:text-[14vw] lg:text-[10.5rem]">
-                {L.headline[0]}<br />{L.headline[1]}<br />
-                <span className="italic text-ieee">{L.headline[2]}</span>
+              <div className="badge-mono mb-6">{L.eyebrow}</div>
+              <h1 className="font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-5xl sm:text-7xl lg:text-8xl text-slate-900">
+                {L.headline[0]} {L.headline[1]}<br />
+                <span className="text-ieee">{L.headline[2]}</span>
               </h1>
-              <p className="mt-8 max-w-xl text-lg sm:text-xl text-ink/80">{L.subhead}</p>
+              <p className="mt-6 max-w-xl text-lg sm:text-xl text-slate-600 leading-relaxed">{L.subhead}</p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <Link to="/submit" className="btn-primary">
                   {L.ctaSubmit} <IconArrow width="20" height="20" />
@@ -35,7 +35,7 @@ export default function Landing() {
               </div>
             </div>
             <div className="lg:col-span-4">
-              <div className="card-brut p-6 bg-paper-dark">
+              <div className="card-brut p-6 bg-slate-50">
                 <div className="eyebrow mb-3">{L.glance.title}</div>
                 <dl className="space-y-3">
                   <Glance label={L.glance.teams} value="24" />
@@ -54,29 +54,29 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-16 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4">
             <div className="eyebrow mb-3">{L.challenge.eyebrow}</div>
-            <h2 className="font-display font-black text-5xl sm:text-6xl leading-none">
+            <h2 className="font-display font-extrabold text-5xl sm:text-6xl leading-tight tracking-tight text-slate-900">
               {L.challenge.titleA}
               {L.challenge.titleB && <><br /><span className="italic">{L.challenge.titleB}</span></>}
             </h2>
           </div>
           <div className="lg:col-span-8">
             <p className="text-xl sm:text-2xl leading-snug">{L.challenge.body}</p>
-            <p className="mt-6 text-base text-ink/70 max-w-2xl">{L.challenge.footnote}</p>
+            <p className="mt-6 text-base text-slate-500 max-w-2xl">{L.challenge.footnote}</p>
           </div>
         </div>
       </section>
 
       {/* WHAT TO BUILD */}
-      <section className="section-rule bg-paper-dark">
+      <section className="section-rule bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-16">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
             <div>
               <div className="eyebrow mb-3">{L.tracks.eyebrow}</div>
-              <h2 className="font-display font-black text-5xl sm:text-6xl leading-none">
+              <h2 className="font-display font-extrabold text-5xl sm:text-6xl leading-tight tracking-tight text-slate-900">
                 {L.tracks.titleA} <span className="italic">{L.tracks.titleB}</span>
               </h2>
             </div>
-            <p className="font-mono text-[12px] uppercase tracking-[0.22em] text-ink/70 max-w-xs">
+            <p className="font-mono text-[12px] uppercase tracking-[0.22em] text-slate-500 max-w-xs">
               {L.tracks.caption}
             </p>
           </div>
@@ -84,15 +84,15 @@ export default function Landing() {
             {L.tracks.items.map((track, i) => {
               const Icon = TRACK_ICONS[i] ?? IconBolt;
               return (
-                <div key={i} className="card-brut p-6 bg-paper flex flex-col">
+                <div key={i} className="card-brut p-6 bg-white flex flex-col">
                   <Icon className="text-ieee mb-4" />
-                  <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink/70">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500">
                     {L.tracks.trackLabel}
                   </div>
-                  <div className="font-display font-black text-3xl mt-1 leading-tight">
+                  <div className="font-display font-extrabold text-3xl mt-1 leading-tight">
                     {track.title}
                   </div>
-                  <p className="mt-4 text-ink/80">{track.body}</p>
+                  <p className="mt-4 text-slate-600">{track.body}</p>
                 </div>
               );
             })}
@@ -105,17 +105,17 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-16 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-4">
             <div className="eyebrow mb-3">{L.timeline.eyebrow}</div>
-            <h2 className="font-display font-black text-5xl sm:text-6xl leading-none">
+            <h2 className="font-display font-extrabold text-5xl sm:text-6xl leading-tight tracking-tight text-slate-900">
               {L.timeline.titleA}<br />
               <span className="italic">{L.timeline.titleB}</span>
             </h2>
-            <p className="mt-6 text-ink/70 max-w-sm">{L.timeline.sub}</p>
+            <p className="mt-6 text-slate-500 max-w-sm">{L.timeline.sub}</p>
           </div>
           <ol className="lg:col-span-8 space-y-4">
             {L.timeline.items.map(([time, label], i) => (
               <li
                 key={i}
-                className="flex items-start gap-6 border-b-2 border-ink/20 pb-4"
+                className="flex items-start gap-6 border-b border-slate-100 pb-4"
               >
                 <span className="font-mono font-bold text-2xl tabular-nums w-20 shrink-0">
                   {String(i + 1).padStart(2, '0')}
@@ -131,44 +131,35 @@ export default function Landing() {
       </section>
 
       {/* JUDGING CRITERIA */}
-      <section className="section-rule bg-ink text-paper">
+      <section className="section-rule bg-gradient-to-b from-ieee-50/60 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-20">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
             <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.24em] text-paper/60 mb-3">
-                {L.criteria.eyebrow}
-              </div>
-              <h2 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
-                {L.criteria.titleA}<br />
-                <span className="italic text-ieee">{L.criteria.titleB}</span>
+              <div className="badge-mono mb-3">{L.criteria.eyebrow}</div>
+              <h2 className="font-display font-extrabold text-4xl sm:text-6xl leading-tight text-slate-900 tracking-tight">
+                {L.criteria.titleA}{' '}
+                <span className="text-ieee">{L.criteria.titleB}</span>
               </h2>
             </div>
-            <div className="flex items-center gap-3 font-mono uppercase tracking-[0.18em] text-xs text-paper/70">
-              <IconBolt className="text-ieee" /> {L.criteria.formula}
+            <div className="flex items-center gap-2 text-sm font-semibold text-slate-500">
+              <IconBolt className="text-accent" width="20" height="20" /> {L.criteria.formula}
             </div>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             {L.criteria.items.map((c) => (
-              <div
-                key={c.n}
-                className="border-2 border-paper bg-ink p-6 shadow-[6px_6px_0_0_#00629B]"
-              >
+              <div key={c.n} className="card-brut">
                 <div className="flex items-start justify-between gap-4">
-                  <div className="font-mono text-[12px] uppercase tracking-[0.22em] text-paper/70">
-                    {c.n}
-                  </div>
-                  <div className="font-display italic font-black text-ieee text-5xl leading-none">
+                  <div className="badge-mono">{c.n}</div>
+                  <div className="font-display font-extrabold text-4xl leading-none tracking-tight text-ieee">
                     25
-                    <span className="text-paper/60 text-2xl"> {L.criteria.ptsLabel}</span>
+                    <span className="text-slate-400 text-base font-semibold"> {L.criteria.ptsLabel}</span>
                   </div>
                 </div>
-                <div className="font-display font-black text-3xl mt-4 leading-tight">
+                <h3 className="mt-4 font-display font-bold text-2xl leading-tight text-slate-900">
                   {c.title}
-                </div>
-                <p className="mt-3 text-paper/80">{c.desc}</p>
-                <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-ieee">
-                  {c.look}
-                </p>
+                </h3>
+                <p className="mt-3 text-slate-600 leading-relaxed">{c.desc}</p>
+                <p className="mt-4 text-sm font-semibold text-ieee">{c.look}</p>
               </div>
             ))}
           </div>
@@ -178,10 +169,10 @@ export default function Landing() {
       {/* CTA */}
       <section className="section-rule">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-20 text-center">
-          <h2 className="font-display font-black text-6xl sm:text-8xl leading-none">
+          <h2 className="font-display font-extrabold text-6xl sm:text-8xl leading-tight tracking-tight text-slate-900">
             {L.finalCta.titleA} <span className="italic text-ieee">{L.finalCta.titleB}</span>
           </h2>
-          <p className="mt-6 text-ink/70 max-w-xl mx-auto">{L.finalCta.sub}</p>
+          <p className="mt-6 text-slate-500 max-w-xl mx-auto">{L.finalCta.sub}</p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link to="/submit" className="btn-primary">
               {L.finalCta.ctaSubmit}
@@ -198,9 +189,9 @@ export default function Landing() {
 
 function Glance({ label, value, last }) {
   return (
-    <div className={`flex items-baseline justify-between ${last ? '' : 'border-b border-ink/30 pb-2'}`}>
-      <dt className="font-mono text-[11px] uppercase tracking-wider text-ink/70">{label}</dt>
-      <dd className="font-display italic font-black text-4xl">{value}</dd>
+    <div className={`flex items-baseline justify-between ${last ? '' : 'border-b border-slate-200 pb-2'}`}>
+      <dt className="font-mono text-[11px] uppercase tracking-wider text-slate-500">{label}</dt>
+      <dd className="font-display font-extrabold text-4xl">{value}</dd>
     </div>
   );
 }

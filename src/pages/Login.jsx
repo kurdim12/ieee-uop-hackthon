@@ -53,14 +53,14 @@ export default function Login() {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="eyebrow">{L.eyebrow}</div>
-            <h1 className="font-display font-black text-5xl sm:text-6xl mt-2 leading-none">
+            <h1 className="font-display font-extrabold text-5xl sm:text-6xl mt-2 leading-none">
               {L.titleA}<br />
               <span className="italic text-ieee">{L.titleB}</span>
             </h1>
-            <p className="mt-4 text-ink/70 text-sm">{L.sub}</p>
+            <p className="mt-4 text-slate-500 text-sm">{L.sub}</p>
           </div>
 
-          <form onSubmit={onSubmit} className="card-brut p-8 bg-paper space-y-6">
+          <form onSubmit={onSubmit} className="card-brut p-8 bg-white space-y-6">
             <div>
               <label htmlFor="username" className="field-label">{L.username}</label>
               <input id="username" type="text" autoComplete="username" className="input-line"
@@ -75,7 +75,7 @@ export default function Login() {
             </div>
 
             {error && (
-              <div className="border-2 border-petra bg-petra-soft px-3 py-2 font-mono text-sm">
+              <div className="border border-red-200 bg-red-50 px-3 py-2 font-mono text-sm">
                 {error}
               </div>
             )}
@@ -94,7 +94,7 @@ export default function Login() {
             </button>
 
             <div className="text-center pt-2">
-              <Link to="/" className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/60 hover:text-ink underline">
+              <Link to="/" className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-ink underline">
                 {L.backLink}
               </Link>
             </div>

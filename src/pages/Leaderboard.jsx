@@ -14,14 +14,14 @@ export default function Leaderboard() {
   return (
     <Layout status={t.status.live}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 py-32 text-center">
-        <div className="card-brut bg-paper p-12 sm:p-16">
+        <div className="card-brut bg-white p-12 sm:p-16">
           <IconBolt className="mx-auto text-ieee mb-6" width="56" height="56" />
           <div className="eyebrow mb-4">{LB.eyebrow}</div>
-          <h1 className="font-display font-black text-5xl sm:text-7xl leading-[0.9]">
+          <h1 className="font-display font-extrabold text-5xl sm:text-7xl leading-[0.9]">
             {LB.titleA}<br />
             <span className="italic text-ieee">{LB.titleB}</span>
           </h1>
-          <p className="mt-8 text-lg text-ink/70">
+          <p className="mt-8 text-lg text-slate-500">
             {LB.lockedSub || 'The leaderboard is locked until judging is complete. Winners will be announced on the main stage.'}
           </p>
           <div className="mt-10">

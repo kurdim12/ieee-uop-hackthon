@@ -121,7 +121,7 @@ export default function ScoreTeam() {
   if (loading) {
     return (
       <Layout status={t.status.scoring}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-20 font-mono text-sm uppercase tracking-[0.22em] text-ink/60">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-20 font-mono text-sm uppercase tracking-[0.22em] text-slate-500">
           {SC.loadingTeam}
         </div>
       </Layout>
@@ -132,7 +132,7 @@ export default function ScoreTeam() {
     return (
       <Layout status={t.status.scoring}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 py-20">
-          <h1 className="font-display font-black text-5xl">{SC.teamNotFound}</h1>
+          <h1 className="font-display font-extrabold text-5xl">{SC.teamNotFound}</h1>
           <button onClick={() => navigate('/judge')} className="btn-ghost mt-6">
             <IconBack width="20" height="20" /> {SC.backToTeamsBtn}
           </button>
@@ -151,12 +151,12 @@ export default function ScoreTeam() {
           <IconBack width="16" height="16" /> {SC.backLink}
         </Link>
 
-        <div className="mt-8 card-brut bg-paper p-8">
+        <div className="mt-8 card-brut bg-white p-8">
           <div className="eyebrow mb-2">{SC.subject}</div>
-          <h1 className="font-display font-black text-4xl sm:text-6xl leading-[0.95]">
+          <h1 className="font-display font-extrabold text-4xl sm:text-6xl leading-[0.95]">
             {team.team_name}
           </h1>
-          <h2 className="mt-2 font-display italic text-2xl sm:text-3xl text-ieee">
+          <h2 className="mt-2 font-display text-2xl sm:text-3xl text-ieee">
             {team.project_title}
           </h2>
           {team.github_url && (
@@ -170,15 +170,15 @@ export default function ScoreTeam() {
             </a>
           )}
           <div className="mt-6 grid md:grid-cols-3 gap-4">
-            <div className="md:col-span-2 border-2 border-ink p-4">
+            <div className="md:col-span-2 rounded-xl border border-slate-200 p-4">
               <div className="eyebrow">{SC.theIdea}</div>
-              <p className="mt-2 text-ink/90 leading-relaxed whitespace-pre-line">
+              <p className="mt-2 text-slate-700 leading-relaxed whitespace-pre-line">
                 {team.project_desc}
               </p>
             </div>
-            <div className="border-2 border-ink p-4">
+            <div className="rounded-xl border border-slate-200 p-4">
               <div className="eyebrow">{SC.members}</div>
-              <p className="mt-2 text-ink/90">{team.members}</p>
+              <p className="mt-2 text-slate-700">{team.members}</p>
             </div>
           </div>
         </div>
@@ -187,18 +187,18 @@ export default function ScoreTeam() {
           {KEYS.map((key, i) => {
             const c = criteriaTitles[i];
             return (
-              <div key={key} className="card-brut bg-paper p-6">
+              <div key={key} className="card-brut bg-white p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink/60">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500">
                       {c.n} {SC.pts25}
                     </div>
-                    <h3 className="font-display font-black text-2xl mt-1">{c.title}</h3>
-                    <p className="mt-1 text-ink/70 max-w-xl">{c.desc}</p>
+                    <h3 className="font-display font-extrabold text-2xl mt-1">{c.title}</h3>
+                    <p className="mt-1 text-slate-500 max-w-xl">{c.desc}</p>
                   </div>
                   <div className="text-right">
                     <div className="eyebrow">{SC.current}</div>
-                    <div className="font-display italic font-black text-7xl leading-none text-ieee tabular-nums">
+                    <div className="font-display font-extrabold text-7xl leading-none text-ieee tabular-nums">
                       {values[key]}
                     </div>
                   </div>
@@ -219,12 +219,12 @@ export default function ScoreTeam() {
                     min={0}
                     max={25}
                     step={1}
-                    className="w-20 border-2 border-ink bg-paper px-3 py-2 font-mono text-center text-lg tabular-nums focus:outline-none focus:bg-ieee-soft"
+                    className="w-20 rounded-xl border border-slate-200 bg-white px-3 py-2 font-mono text-center text-lg tabular-nums focus:outline-none focus:bg-ieee-50"
                     value={values[key]}
                     onChange={(e) => setField(key, parseInt(e.target.value || '0', 10))}
                   />
                 </div>
-                <div className="mt-2 flex justify-between font-mono text-[10px] uppercase tracking-wider text-ink/40">
+                <div className="mt-2 flex justify-between font-mono text-[10px] uppercase tracking-wider text-slate-400">
                   <span>{SC.sliderLow}</span>
                   <span>{SC.sliderMid}</span>
                   <span>{SC.sliderHigh}</span>
@@ -233,13 +233,13 @@ export default function ScoreTeam() {
             );
           })}
 
-          <div className="card-brut bg-paper p-6">
+          <div className="card-brut bg-white p-6">
             <div className="eyebrow">{SC.privateNotes}</div>
             <label className="sr-only" htmlFor="notes">{SC.privateNotes}</label>
             <textarea
               id="notes"
               rows={4}
-              className="mt-2 w-full border-2 border-ink bg-paper p-3 font-mono text-sm focus:outline-none focus:bg-ieee-soft"
+              className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 font-mono text-sm focus:outline-none focus:bg-ieee-50"
               placeholder={SC.notesPlaceholder}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -247,20 +247,20 @@ export default function ScoreTeam() {
           </div>
 
           {error && (
-            <div className="border-2 border-petra bg-petra-soft p-4 font-mono text-sm">{error}</div>
+            <div className="border border-red-200 bg-red-50 p-4 font-mono text-sm">{error}</div>
           )}
         </div>
       </div>
 
-      <div className="fixed bottom-0 inset-x-0 z-30 border-t-2 border-ink bg-paper">
+      <div className="fixed bottom-0 inset-x-0 z-30 border-t border-slate-100 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-baseline gap-3">
-            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink/60">
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500">
               {SC.total}
             </span>
-            <span className="font-display italic font-black text-5xl sm:text-6xl tabular-nums leading-none">
+            <span className="font-display font-extrabold text-5xl sm:text-6xl tabular-nums leading-none">
               {total}
-              <span className="text-ink/40 text-3xl"> / 100</span>
+              <span className="text-slate-400 text-3xl"> / 100</span>
             </span>
           </div>
           <button onClick={onSave} className="btn-primary" disabled={saving}>

@@ -102,36 +102,36 @@ export default function Submit() {
     return (
       <Layout status={t.status.submitted}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 py-20">
-          <div className="card-brut bg-paper p-10">
+          <div className="card-brut bg-white p-10">
             <div className="eyebrow mb-4">{SS.eyebrow}</div>
             <div className="flex items-start gap-4">
               <IconCheck className="text-moss shrink-0 mt-2" width="56" height="56" strokeWidth="3" />
-              <h1 className="font-display italic font-black text-6xl sm:text-8xl text-ieee leading-[0.9]">
+              <h1 className="font-display font-extrabold text-6xl sm:text-8xl text-ieee leading-[0.9]">
                 {SS.heading}
               </h1>
             </div>
             <div className="mt-8 grid sm:grid-cols-2 gap-4">
-              <div className="border-2 border-ink p-4">
+              <div className="rounded-xl border border-slate-200 p-4">
                 <div className="eyebrow">{SS.team}</div>
-                <div className="font-display font-black text-2xl mt-1">{result.team_name}</div>
+                <div className="font-display font-extrabold text-2xl mt-1">{result.team_name}</div>
               </div>
-              <div className="border-2 border-ink p-4">
+              <div className="rounded-xl border border-slate-200 p-4">
                 <div className="eyebrow">{SS.project}</div>
-                <div className="font-display font-black text-2xl mt-1">{result.project_title}</div>
+                <div className="font-display font-extrabold text-2xl mt-1">{result.project_title}</div>
               </div>
             </div>
-            <div className="mt-4 border-2 border-ink p-4">
+            <div className="mt-4 rounded-xl border border-slate-200 p-4">
               <div className="eyebrow">{SS.repository}</div>
               <a href={result.github_url} target="_blank" rel="noreferrer"
                  className="font-mono text-sm mt-1 break-all underline hover:text-ieee">
                 {result.github_url}
               </a>
             </div>
-            <div className="mt-4 border-2 border-dashed border-ink/50 p-4">
+            <div className="mt-4 border-2 border-dashed border-slate-200/50 p-4">
               <div className="eyebrow">{SS.submissionId}</div>
               <div className="font-mono text-xs sm:text-sm mt-1 break-all">{result.id}</div>
             </div>
-            <p className="mt-6 text-ink/70">{SS.body}</p>
+            <p className="mt-6 text-slate-500">{SS.body}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/" className="btn-primary">
                 {SS.backHome} <IconArrow width="20" height="20" />
@@ -147,11 +147,11 @@ export default function Submit() {
     <Layout status={t.status.submission}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 py-16">
         <div className="eyebrow mb-4">{S.eyebrow}</div>
-        <h1 className="font-display font-black text-6xl sm:text-7xl leading-[0.9]">
+        <h1 className="font-display font-extrabold text-6xl sm:text-7xl leading-[0.9]">
           {S.titleA}{S.titleB ? <><br />{S.titleB}</> : null}{' '}
           <span className="italic text-ieee">{S.titleC}</span>
         </h1>
-        <p className="mt-5 text-lg text-ink/70 max-w-xl">{S.subhead}</p>
+        <p className="mt-5 text-lg text-slate-500 max-w-xl">{S.subhead}</p>
 
         <form onSubmit={onSubmit} className="mt-12 space-y-10" noValidate>
           <Field label={S.fields.teamName} error={showError('team_name') && liveErrors.team_name}>
@@ -176,7 +176,7 @@ export default function Submit() {
           <div>
             <div className="flex items-baseline justify-between">
               <label htmlFor="project_desc" className="field-label">{S.fields.ideaLabel}</label>
-              <span className={`font-mono text-[11px] tabular-nums ${descCount > 500 || descCount < 50 ? 'text-petra' : 'text-ink/60'}`}>
+              <span className={`font-mono text-[11px] tabular-nums ${descCount > 500 || descCount < 50 ? 'text-petra' : 'text-slate-500'}`}>
                 {descCount} / 500
               </span>
             </div>
@@ -207,10 +207,10 @@ export default function Submit() {
           </div>
 
           {submitError && (
-            <div className="border-2 border-petra bg-petra-soft p-4 font-mono text-sm">{submitError}</div>
+            <div className="border border-red-200 bg-red-50 p-4 font-mono text-sm">{submitError}</div>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 pt-4 border-t-2 border-ink/30">
+          <div className="flex flex-wrap items-center gap-4 pt-4 border-t-2 border-slate-200">
             <button type="submit" className="btn-primary" disabled={submitting}>
               {submitting ? (
                 <>
