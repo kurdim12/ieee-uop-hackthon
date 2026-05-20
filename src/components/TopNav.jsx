@@ -22,9 +22,9 @@ export default function TopNav({ status }) {
   });
 
   const labels = t.nav.labels;
-  const label = pathname.startsWith('/judge/')
-    ? labels['/judge/']
-    : (labels[pathname] ?? pathname.toUpperCase());
+  const label =
+    labels[pathname]
+    ?? (pathname.startsWith('/judge/') ? labels['/judge/'] : pathname.toUpperCase());
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-100 bg-white/85 backdrop-blur-md">

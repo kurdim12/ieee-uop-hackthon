@@ -4,6 +4,7 @@ import Submit from './pages/Submit.jsx';
 import Login from './pages/Login.jsx';
 import JudgeDashboard from './pages/JudgeDashboard.jsx';
 import ScoreTeam from './pages/ScoreTeam.jsx';
+import Brief from './pages/Brief.jsx';
 import Leaderboard from './pages/Leaderboard.jsx';
 import AdminLogin from './pages/AdminLogin.jsx';
 import Admin from './pages/Admin.jsx';
@@ -22,6 +23,14 @@ export default function App() {
         element={
           <RequireJudge>
             <JudgeDashboard />
+          </RequireJudge>
+        }
+      />
+      <Route
+        path="/judge/brief"
+        element={
+          <RequireJudge>
+            <Brief />
           </RequireJudge>
         }
       />

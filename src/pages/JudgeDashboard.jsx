@@ -98,9 +98,14 @@ export default function JudgeDashboard() {
               <span className="italic text-ieee">{judge.full_name}.</span>
             </h1>
           </div>
-          <button onClick={logout} className="btn-ghost">
-            <IconLogout width="20" height="20" /> {J.logoutBtn}
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link to="/judge/brief" className="btn-ghost">
+              {J.briefBtn || 'JUDGE BRIEF'}
+            </Link>
+            <button onClick={logout} className="btn-ghost">
+              <IconLogout width="20" height="20" /> {J.logoutBtn}
+            </button>
+          </div>
         </div>
 
         <div className="mt-10 grid md:grid-cols-3 gap-4">
