@@ -63,6 +63,23 @@ export default function JudgeDashboard() {
     [teams, scores]
   );
 
+  async function deleteTeam(team) {
+    const tmpl = J.deleteConfirm || 'Delete "{team}"? This removes the team and all its scores. The team can resubmit.';
+    if (!window.confirm(tmpl.replace('{team}', team.team_name))) return;
+    try {
+      const { error: delErr } = await supabase.from('teams').delete().eq('id', team.id);
+      if (delErr) throw delErr;
+      setTeams((prev) => prev.filter((tm) => tm.id !== team.id));
+      setScores((prev) => {
+        const next = { ...prev };
+        delete next[team.id];
+        return next;
+      });
+    } catch (err) {
+      setError(err?.message || J.deleteFailed || 'Could not delete team.');
+    }
+  }
+
   function logout() {
     clearJudge();
     navigate('/login', { replace: true });
@@ -214,8 +231,17 @@ export default function JudgeDashboard() {
                       {J.openRepo}
                     </a>
                   )}
-                  <div className="mt-4 flex items-center justify-end font-mono text-[12px] uppercase tracking-[0.18em] text-ieee">
-                    {scored ? J.adjustScore : J.scoreNow} <IconArrow width="14" height="14" />
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <button
+                      type="button"
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); deleteTeam(team); }}
+                      className="inline-flex items-center font-mono font-bold text-[10px] uppercase tracking-[0.18em] border-2 border-petra text-petra px-2 py-1 hover:bg-petra hover:text-white transition-colors"
+                    >
+                      {J.deleteBtn || 'DELETE'}
+                    </button>
+                    <span className="inline-flex items-center font-mono text-[12px] uppercase tracking-[0.18em] text-ieee">
+                      {scored ? J.adjustScore : J.scoreNow} <IconArrow width="14" height="14" />
+                    </span>
                   </div>
                 </Link>
               );

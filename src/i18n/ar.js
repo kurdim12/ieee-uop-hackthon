@@ -253,6 +253,9 @@ export default {
     noTeams: 'لا توجد فرق بعد.',
     noTeamsSub: 'ستظهر الفرق هنا فور تسجيلها.',
     loadFailed: 'تعذّر تحميل الفرق.',
+    deleteBtn: 'حذف',
+    deleteConfirm: 'حذف "{team}"؟ سيؤدي ذلك إلى إزالة الفريق وجميع تقييماته. يمكن للفريق إعادة التسجيل.',
+    deleteFailed: 'تعذّر حذف الفريق.',
   },
 
   score: {
@@ -346,13 +349,10 @@ export default {
       },
       notScoredYet: 'لم يتم التقييم بعد',
       openRepo: 'فتح المستودع ↗',
-      deleteBtn: 'حذف الفريق',
     },
     loading: 'جارٍ التحميل…',
     loadFailed: 'تعذّر تحميل بيانات الإدارة.',
     noJudges: 'لم يتم تحميل أي حكّام.',
-    deleteConfirm: 'حذف "{team}"؟ سيؤدي ذلك إلى إزالة الفريق وجميع تقييماته. يمكن للفريق إعادة التسجيل.',
-    deleteFailed: 'تعذّر حذف الفريق.',
   },
 
   common: {

@@ -253,6 +253,9 @@ export default {
     noTeams: 'No teams yet.',
     noTeamsSub: 'Teams will appear here as soon as they register.',
     loadFailed: 'Failed to load teams.',
+    deleteBtn: 'DELETE',
+    deleteConfirm: 'Delete "{team}"? This removes the team and all its scores. The team can resubmit.',
+    deleteFailed: 'Could not delete team.',
   },
 
   score: {
@@ -346,13 +349,10 @@ export default {
       },
       notScoredYet: 'not scored yet',
       openRepo: 'open repository ↗',
-      deleteBtn: 'DELETE TEAM',
     },
     loading: 'Loading…',
     loadFailed: 'Failed to load admin data.',
     noJudges: 'No judges loaded.',
-    deleteConfirm: 'Delete "{team}"? This removes the team and all its scores. The team can resubmit.',
-    deleteFailed: 'Could not delete team.',
   },
 
   common: {
