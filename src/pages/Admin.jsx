@@ -257,10 +257,12 @@ export default function Admin() {
                                         <thead>
                                           <tr className="font-mono uppercase tracking-wider text-[10px] text-slate-500">
                                             <th className="py-1 pr-3">{A.expanded.cols.judge}</th>
-                                            <th className="py-1 pr-3 text-right">{A.expanded.cols.innov}</th>
-                                            <th className="py-1 pr-3 text-right">{A.expanded.cols.exec}</th>
-                                            <th className="py-1 pr-3 text-right">{A.expanded.cols.pres}</th>
-                                            <th className="py-1 pr-3 text-right">{A.expanded.cols.impact}</th>
+                                            <th className="py-1 pr-3 text-right" title="Problem Understanding · 25">{(t.criteria?.items?.[0]?.abbr) || 'PROB'}</th>
+                                            <th className="py-1 pr-3 text-right" title="Role Completeness · 20">{(t.criteria?.items?.[1]?.abbr) || 'ROLES'}</th>
+                                            <th className="py-1 pr-3 text-right" title="Full-Stack · 20">{(t.criteria?.items?.[2]?.abbr) || 'STACK'}</th>
+                                            <th className="py-1 pr-3 text-right" title="UX/UI · 15">{(t.criteria?.items?.[3]?.abbr) || 'UX'}</th>
+                                            <th className="py-1 pr-3 text-right" title="Pitch · 10">{(t.criteria?.items?.[4]?.abbr) || 'PITCH'}</th>
+                                            <th className="py-1 pr-3 text-right" title="Creativity · 10">{(t.criteria?.items?.[5]?.abbr) || 'CREAT'}</th>
                                             <th className="py-1 pr-3 text-right">{A.expanded.cols.total}</th>
                                             <th className="py-1 pl-3">{A.expanded.cols.notes}</th>
                                           </tr>
@@ -272,7 +274,7 @@ export default function Admin() {
                                               return (
                                                 <tr key={j.id} className="border-t border-slate-200/10">
                                                   <td className="py-2 pr-3 font-mono text-xs">{j.username}</td>
-                                                  <td colSpan={6} className="py-2 text-slate-400 italic">
+                                                  <td colSpan={8} className="py-2 text-slate-400 italic">
                                                     {A.expanded.notScoredYet}
                                                   </td>
                                                 </tr>
@@ -281,10 +283,12 @@ export default function Admin() {
                                             return (
                                               <tr key={j.id} className="border-t border-slate-200/10">
                                                 <td className="py-2 pr-3 font-mono text-xs">{j.username}</td>
-                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.innovation}</td>
-                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.execution}</td>
-                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.presentation}</td>
-                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.impact}</td>
+                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.problem_understanding}</td>
+                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.role_completeness}</td>
+                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.fullstack_execution}</td>
+                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.uxui_design}</td>
+                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.pitch_storytelling}</td>
+                                                <td className="py-2 pr-3 text-right font-mono tabular-nums">{sc.creativity}</td>
                                                 <td className="py-2 pr-3 text-right font-mono font-bold tabular-nums">{sc.total}</td>
                                                 <td className="py-2 pl-3 text-slate-500 text-xs italic max-w-md">
                                                   {sc.notes || '—'}

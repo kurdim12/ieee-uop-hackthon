@@ -85,7 +85,7 @@ export default function JudgeDashboard() {
     navigate('/login', { replace: true });
   }
 
-  const rubricItems = t.landing.criteria.items;
+  const rubricItems = t.criteria?.items ?? t.landing.criteria.items;
 
   return (
     <Layout status={`${t.status.signedInPrefix} · ${judge.username.toUpperCase()}`}>
@@ -149,7 +149,7 @@ export default function JudgeDashboard() {
               {J.rubricSub}
             </span>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {rubricItems.map((c) => (
               <div key={c.n} className="card-brut bg-white p-5">
                 <div className="flex items-baseline justify-between">
@@ -157,7 +157,7 @@ export default function JudgeDashboard() {
                     {c.n}
                   </span>
                   <span className="font-display font-extrabold text-3xl text-ieee tabular-nums leading-none">
-                    {J.pts}
+                    {c.max ?? J.pts}
                     <span className="text-slate-400 text-sm"> {J.ptsUnit}</span>
                   </span>
                 </div>

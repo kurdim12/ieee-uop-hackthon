@@ -7,18 +7,31 @@ import { supabase } from '../lib/supabase.js';
 import { getJudge } from '../lib/auth.js';
 import { useT } from '../i18n/index.jsx';
 
-const KEYS = ['innovation', 'execution', 'presentation', 'impact'];
-const DEFAULTS = { innovation: 12, execution: 12, presentation: 12, impact: 12 };
+// Six criteria, each with its own max score. Total maxes at 100.
+const CRITERIA = [
+  { key: 'problem_understanding', max: 25, n: '01' },
+  { key: 'role_completeness',     max: 20, n: '02' },
+  { key: 'fullstack_execution',   max: 20, n: '03' },
+  { key: 'uxui_design',           max: 15, n: '04' },
+  { key: 'pitch_storytelling',    max: 10, n: '05' },
+  { key: 'creativity',            max: 10, n: '06' },
+];
 
-function clamp(v) {
+const KEYS = CRITERIA.map((c) => c.key);
+const DEFAULTS = CRITERIA.reduce(
+  (acc, c) => ({ ...acc, [c.key]: Math.round(c.max / 2) }),
+  {}
+);
+
+function clamp(v, max) {
   const n = Number.isFinite(v) ? Math.round(v) : 0;
-  return Math.max(0, Math.min(25, n));
+  return Math.max(0, Math.min(max, n));
 }
 
 export default function ScoreTeam() {
   const { t } = useT();
   const SC = t.score;
-  const criteriaTitles = t.landing.criteria.items;
+  const criteriaTitles = t.criteria?.items ?? [];
   const { teamId } = useParams();
   const navigate = useNavigate();
   const judge = getJudge();
@@ -46,7 +59,7 @@ export default function ScoreTeam() {
             .maybeSingle(),
           supabase
             .from('scores')
-            .select('id, innovation, execution, presentation, impact, notes')
+            .select('id, problem_understanding, role_completeness, fullstack_execution, uxui_design, pitch_storytelling, creativity, notes')
             .eq('team_id', teamId)
             .eq('judge_id', judge.id)
             .maybeSingle(),
@@ -63,10 +76,12 @@ export default function ScoreTeam() {
         if (sData) {
           setExistingId(sData.id);
           setValues({
-            innovation: sData.innovation,
-            execution: sData.execution,
-            presentation: sData.presentation,
-            impact: sData.impact,
+            problem_understanding: sData.problem_understanding,
+            role_completeness:     sData.role_completeness,
+            fullstack_execution:   sData.fullstack_execution,
+            uxui_design:           sData.uxui_design,
+            pitch_storytelling:    sData.pitch_storytelling,
+            creativity:            sData.creativity,
           });
           setNotes(sData.notes || '');
         }
@@ -81,12 +96,12 @@ export default function ScoreTeam() {
   }, [teamId, judge.id, SC.teamNotFound, SC.loadFailed]);
 
   const total = useMemo(
-    () => values.innovation + values.execution + values.presentation + values.impact,
+    () => KEYS.reduce((sum, k) => sum + (values[k] || 0), 0),
     [values]
   );
 
-  function setField(key, raw) {
-    setValues((v) => ({ ...v, [key]: clamp(raw) }));
+  function setField(key, max, raw) {
+    setValues((v) => ({ ...v, [key]: clamp(raw, max) }));
   }
 
   async function onSave() {
@@ -96,10 +111,12 @@ export default function ScoreTeam() {
       const payload = {
         team_id: teamId,
         judge_id: judge.id,
-        innovation: values.innovation,
-        execution: values.execution,
-        presentation: values.presentation,
-        impact: values.impact,
+        problem_understanding: values.problem_understanding,
+        role_completeness:     values.role_completeness,
+        fullstack_execution:   values.fullstack_execution,
+        uxui_design:           values.uxui_design,
+        pitch_storytelling:    values.pitch_storytelling,
+        creativity:            values.creativity,
         notes: notes.trim() || null,
         updated_at: new Date().toISOString(),
       };
@@ -181,25 +198,35 @@ export default function ScoreTeam() {
               <p className="mt-2 text-slate-700">{team.members}</p>
             </div>
           </div>
+
+          <div className="mt-4">
+            <Link
+              to="/judge/brief"
+              className="inline-flex items-center text-xs font-semibold uppercase tracking-[0.18em] text-ieee hover:text-ieee-700"
+            >
+              {SC.openBrief || 'open judge brief ↗'}
+            </Link>
+          </div>
         </div>
 
         <div className="mt-10 space-y-6">
-          {KEYS.map((key, i) => {
-            const c = criteriaTitles[i];
+          {CRITERIA.map(({ key, max, n }) => {
+            const c = criteriaTitles[Number(n) - 1] ?? {};
             return (
               <div key={key} className="card-brut bg-white p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500">
-                      {c.n} {SC.pts25}
+                      {n} · {max} pts
                     </div>
                     <h3 className="font-display font-extrabold text-2xl mt-1">{c.title}</h3>
-                    <p className="mt-1 text-slate-500 max-w-xl">{c.desc}</p>
+                    {c.desc && <p className="mt-1 text-slate-500 max-w-xl">{c.desc}</p>}
                   </div>
                   <div className="text-right">
                     <div className="eyebrow">{SC.current}</div>
                     <div className="font-display font-extrabold text-7xl leading-none text-ieee tabular-nums">
                       {values[key]}
+                      <span className="text-slate-300 text-3xl"> / {max}</span>
                     </div>
                   </div>
                 </div>
@@ -207,27 +234,27 @@ export default function ScoreTeam() {
                   <input
                     type="range"
                     min={0}
-                    max={25}
+                    max={max}
                     step={1}
                     className="brut-slider flex-1"
                     value={values[key]}
-                    onChange={(e) => setField(key, parseInt(e.target.value, 10))}
-                    aria-label={`${c.title} score`}
+                    onChange={(e) => setField(key, max, parseInt(e.target.value, 10))}
+                    aria-label={c.title || key}
                   />
                   <input
                     type="number"
                     min={0}
-                    max={25}
+                    max={max}
                     step={1}
-                    className="w-20 rounded-xl border border-slate-200 bg-white px-3 py-2 font-mono text-center text-lg tabular-nums focus:outline-none focus:bg-ieee-50"
+                    className="w-20 rounded-xl border border-slate-200 bg-white px-3 py-2 font-mono text-center text-lg tabular-nums focus:outline-none focus:border-ieee focus:ring-4 focus:ring-ieee/15"
                     value={values[key]}
-                    onChange={(e) => setField(key, parseInt(e.target.value || '0', 10))}
+                    onChange={(e) => setField(key, max, parseInt(e.target.value || '0', 10))}
                   />
                 </div>
                 <div className="mt-2 flex justify-between font-mono text-[10px] uppercase tracking-wider text-slate-400">
-                  <span>{SC.sliderLow}</span>
-                  <span>{SC.sliderMid}</span>
-                  <span>{SC.sliderHigh}</span>
+                  <span>0</span>
+                  <span>{Math.round(max / 2)}</span>
+                  <span>{max}</span>
                 </div>
               </div>
             );
@@ -239,7 +266,7 @@ export default function ScoreTeam() {
             <textarea
               id="notes"
               rows={4}
-              className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 font-mono text-sm focus:outline-none focus:bg-ieee-50"
+              className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 font-sans text-sm focus:outline-none focus:border-ieee focus:ring-4 focus:ring-ieee/15"
               placeholder={SC.notesPlaceholder}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -247,18 +274,18 @@ export default function ScoreTeam() {
           </div>
 
           {error && (
-            <div className="border border-red-200 bg-red-50 p-4 font-mono text-sm">{error}</div>
+            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</div>
           )}
         </div>
       </div>
 
-      <div className="fixed bottom-0 inset-x-0 z-30 border-t border-slate-100 bg-white">
+      <div className="fixed bottom-0 inset-x-0 z-30 border-t border-slate-100 bg-white/95 backdrop-blur-md">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-baseline gap-3">
-            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-slate-500">
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
               {SC.total}
             </span>
-            <span className="font-display font-extrabold text-5xl sm:text-6xl tabular-nums leading-none">
+            <span className="font-display font-extrabold text-5xl sm:text-6xl tabular-nums leading-none text-slate-900">
               {total}
               <span className="text-slate-400 text-3xl"> / 100</span>
             </span>

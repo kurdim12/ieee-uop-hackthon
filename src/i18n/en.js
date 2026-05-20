@@ -227,6 +227,23 @@ export default {
     sub: 'Organizers only. Judges use the regular login.',
   },
 
+  criteria: {
+    items: [
+      { n: '01', max: 25, abbr: 'PROB',  title: 'Problem Understanding & Human Empathy',
+        desc: 'Did the team grasp the real story behind the problem and respect the people in it?' },
+      { n: '02', max: 20, abbr: 'ROLES', title: 'Three-Role Completeness',
+        desc: 'Each scenario defines three roles. Is each role built fully and distinctly?' },
+      { n: '03', max: 20, abbr: 'STACK', title: 'Full-Stack Execution Quality',
+        desc: 'Four required layers: Frontend, Backend, Database, Deployment.' },
+      { n: '04', max: 15, abbr: 'UX',    title: 'UX / UI Design',
+        desc: 'Visual hierarchy, typography, RTL handling — does the design serve the content?' },
+      { n: '05', max: 10, abbr: 'PITCH', title: 'Pitch & Storytelling',
+        desc: 'Can the team explain decisions and handle hard questions?' },
+      { n: '06', max: 10, abbr: 'CREAT', title: 'Creativity & Unexpected Decisions',
+        desc: 'Did they ship something we did not expect — that actually serves the problem?' },
+    ],
+  },
+
   judge: {
     eyebrow: 'JUDGE DESK',
     welcome: 'WELCOME,',
@@ -283,6 +300,7 @@ export default {
     loadingTeam: 'Loading team…',
     loadFailed: 'Failed to load team.',
     saveFailed: 'Could not save score.',
+    openBrief: 'open judge brief ↗',
   },
 
   leaderboard: {
