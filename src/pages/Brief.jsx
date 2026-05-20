@@ -3,7 +3,7 @@ import Layout from '../components/Layout.jsx';
 import { IconBack } from '../components/Icons.jsx';
 import { useT } from '../i18n/index.jsx';
 
-// Judge-only Hackathon 2026 briefing — Arabic, RTL, read-only.
+// Judge-only Hackathon 2026 briefing — Arabic RTL, read-only.
 // Protected at the route level by <RequireJudge>. No DB writes.
 
 const SCENARIOS = [
@@ -17,16 +17,12 @@ const SCENARIOS = [
     centralProblem:
       'ابنِ نظاماً يحاسب سائقي التوصيل على التسليم في الوقت المحدّد وبشكل كامل، بدون أن يحوّل يوم عملهم إلى سجن. الثقة لازم تمشي بالاتجاهين.',
     roles: [
-      { key: 'customer',   label: 'العميل'      },
-      { key: 'rider',      label: 'السائق'      },
-      { key: 'dispatcher', label: 'مدير العمليات' },
+      { key: 'customer',   label: 'العميل'         },
+      { key: 'rider',      label: 'السائق'         },
+      { key: 'dispatcher', label: 'مدير العمليات'  },
     ],
     seed: '6 سائقين · 5 طلبات تجريبية',
-    outOfScope: [
-      'تتبّع GPS حقيقي',
-      'دفعات حقيقية',
-      'تطبيق هاتف أصلي',
-    ],
+    outOfScope: ['تتبّع GPS حقيقي', 'دفعات حقيقية', 'تطبيق هاتف أصلي'],
   },
   {
     n: '03',
@@ -38,43 +34,118 @@ const SCENARIOS = [
     centralProblem:
       'قلّل نسبة الـ no-show بدون أن تجعل المريض يحسّ أنه يُعاقَب. الحلول السهلة — الرسوم، الحظر، التهديد — خارج الطاولة.',
     roles: [
-      { key: 'patient', label: 'المريض'  },
-      { key: 'doctor',  label: 'الطبيب'   },
-      { key: 'manager', label: 'المدير'   },
+      { key: 'patient', label: 'المريض' },
+      { key: 'doctor',  label: 'الطبيب'  },
+      { key: 'manager', label: 'المدير'  },
     ],
     seed: '6 أطباء · 6 حجوزات تجريبية',
-    outOfScope: [
-      'سجلات طبية حقيقية',
-      'تكامل التأمين الصحّي',
-      'إرسال SMS حقيقي',
+    outOfScope: ['سجلات طبية حقيقية', 'تكامل التأمين الصحّي', 'إرسال SMS حقيقي'],
+  },
+];
+
+const SUBMISSION_FIELDS = [
+  { key: 'live_url',            label: 'رابط الموقع المباشر',          required: true,  hint: 'لا يُقبل localhost' },
+  { key: 'repo_url',            label: 'رابط المستودع (GitHub/GitLab)', required: true,  hint: 'عام أو وصول للحكّام' },
+  { key: 'db_schema_url',       label: 'مخطّط قاعدة البيانات',          required: true,  hint: 'صورة أو ملف SQL أو PDF' },
+  { key: 'demo_accounts',       label: 'حسابات تجريبية لكل دور',        required: true,  hint: 'حساب واحد على الأقل لكل دور' },
+  { key: 'tech_stack',          label: 'التقنيات المستخدمة',           required: true,  hint: 'Frontend · Backend · DB' },
+  { key: 'deployment_platform', label: 'منصّة الاستضافة',              required: false, hint: 'Vercel · Netlify · Render …' },
+];
+
+const CRITERIA = [
+  {
+    n: 1,
+    weight: 25,
+    titleAr: 'فهم المشكلة وتلامس الإنسان',
+    titleEn: 'Problem Understanding & Human Empathy',
+    intentAr: 'هل الفريق فهم القصة الحقيقية وراء المشكلة؟ هل الحلّ يحترم الناس الموجودين فيها؟',
+    bands: [
+      { range: '21 – 25', label: 'ممتاز',    en: 'Excellent', descAr: 'أمسكوا التوتّر الأساسي في القصة (المراقبة مقابل الكرامة، الفعالية مقابل الإنسانية). الحلّ يحلّ المشكلة الحقيقية.' },
+      { range: '16 – 20', label: 'جيد جداً', en: 'Very Good', descAr: 'فهموا المشكلة المعلَنة، الحلّ منطقي، لكن قد فاتهم بعض التفاصيل الإنسانية.' },
+      { range: '11 – 15', label: 'مقبول',    en: 'Acceptable', descAr: 'حلّوا "المشكلة على الورق" بدون عمق.' },
+      { range: '0 – 10',  label: 'ضعيف',     en: 'Weak',      descAr: 'بنوا شيئاً تقنياً لا علاقة له بالقصة، أو ناقضوا روحها.' },
+    ],
+  },
+  {
+    n: 2,
+    weight: 20,
+    titleAr: 'اكتمال الأدوار الثلاثة',
+    titleEn: 'Three-Role Completeness',
+    intentAr: 'كل سيناريو يحدّد ثلاثة أدوار. هل بنى الفريق تجربة كاملة لكل دور؟',
+    bands: [
+      { range: '17 – 20', label: 'ممتاز',    en: 'Excellent', descAr: 'الأدوار الثلاثة مبنية بعناية، كل واحد له واجهة مناسبة، التدفّق سلس بينها.' },
+      { range: '13 – 16', label: 'جيد جداً', en: 'Very Good', descAr: 'كل الأدوار موجودة، لكن واحد منها أضعف.' },
+      { range: '8 – 12',  label: 'مقبول',    en: 'Acceptable', descAr: 'اكتفوا بدورين، أو دور واحد متطوّر مع دورين سطحيين.' },
+      { range: '0 – 7',   label: 'ضعيف',     en: 'Weak',      descAr: 'دور واحد فقط، أو الأدوار غير متمايزة فعلياً.' },
+    ],
+  },
+  {
+    n: 3,
+    weight: 20,
+    titleAr: 'جودة التنفيذ الـ Full-Stack',
+    titleEn: 'Full-Stack Execution Quality',
+    intentAr: 'هاكاثون Full-Stack — أربع طبقات مطلوبة: Frontend, Backend, Database, Deployment. غياب أيّ طبقة = العمل غير مكتمل.',
+    bands: [
+      { range: '17 – 20', label: 'ممتاز',    en: 'Excellent', descAr: 'الطبقات الأربع موجودة وتعمل: Frontend مستجيب، Backend بـ API نظيف، Database بمخطّط منطقي، نشر حيّ.' },
+      { range: '13 – 16', label: 'جيد جداً', en: 'Very Good', descAr: 'الطبقات الأربع موجودة لكن واحدة أضعف (Backend في نفس مشروع Frontend، أو DB بدون indexes).' },
+      { range: '8 – 12',  label: 'مقبول',    en: 'Acceptable', descAr: 'ثلاث طبقات فقط (front-only مع localStorage، أو front+back بدون نشر).' },
+      { range: '0 – 7',   label: 'ضعيف',     en: 'Weak',      descAr: 'طبقتان أو أقل. أعطال خلال العرض، الكود لا يعمل خارج جهاز المتسابق.' },
+    ],
+  },
+  {
+    n: 4,
+    weight: 15,
+    titleAr: 'تصميم الواجهة والتجربة (UX/UI)',
+    titleEn: 'UX/UI Design',
+    intentAr: 'ليس عن الجمال البصري فقط — هل القرارات البصرية تخدم المحتوى؟',
+    bands: [
+      { range: '13 – 15', label: 'ممتاز',    en: 'Excellent', descAr: 'تصميم نظيف، تسلسل بصري واضح، تايبوغرافيا مدروسة، RTL مضبوط.' },
+      { range: '9 – 12',  label: 'جيد جداً', en: 'Very Good', descAr: 'تصميم جيد بشكل عام لكن مع تفاصيل غير متّسقة.' },
+      { range: '5 – 8',   label: 'مقبول',    en: 'Acceptable', descAr: 'اعتماد على bootstrap الافتراضي بدون لمسة خاصة.' },
+      { range: '0 – 4',   label: 'ضعيف',     en: 'Weak',      descAr: 'تصميم فوضوي، صعب القراءة، أو يكسر RTL.' },
+    ],
+  },
+  {
+    n: 5,
+    weight: 10,
+    titleAr: 'العرض التقديمي والقصة',
+    titleEn: 'Pitch & Storytelling',
+    intentAr: 'هل الفريق يقدر يشرح القرارات؟ هل يجاوب على الأسئلة الصعبة؟',
+    bands: [
+      { range: '9 – 10', label: 'ممتاز',    en: 'Excellent', descAr: 'عرض واضح، قصة متماسكة، إجابات دقيقة، اعتراف بحدود الحلّ.' },
+      { range: '7 – 8',  label: 'جيد جداً', en: 'Very Good', descAr: 'عرض جيد لكن فيه إطالة أو نقص.' },
+      { range: '4 – 6',  label: 'مقبول',    en: 'Acceptable', descAr: 'ضعيف الترابط، يدخل في تفاصيل تقنية بدل القصة.' },
+      { range: '0 – 3',  label: 'ضعيف',     en: 'Weak',      descAr: 'مرتبك، لا يقدر يشرح القرارات، يتجنّب الأسئلة.' },
+    ],
+  },
+  {
+    n: 6,
+    weight: 10,
+    titleAr: 'الإبداع والقرارات غير المتوقّعة',
+    titleEn: 'Creativity & Unexpected Decisions',
+    intentAr: 'هل قدّم الفريق فكرة لم نتوقّعها؟',
+    bands: [
+      { range: '9 – 10', label: 'ممتاز',    en: 'Excellent', descAr: 'ميزة أو قرار تصميمي مفاجئ، مبني فعلياً، يخدم المشكلة.' },
+      { range: '7 – 8',  label: 'جيد جداً', en: 'Very Good', descAr: 'محاولة إبداعية واضحة لكن غير مكتملة.' },
+      { range: '4 – 6',  label: 'مقبول',    en: 'Acceptable', descAr: 'تنفيذ تقليدي وآمن، بدون لحظة لافتة.' },
+      { range: '0 – 3',  label: 'ضعيف',     en: 'Weak',      descAr: 'تنفيذ مقلَّد، أو "gimmick" لا يخدم المشكلة.' },
     ],
   },
 ];
 
-const CRITERIA = [
-  { n: 1, title: 'فهم المشكلة وتلامس الإنسان', weight: 25 },
-  { n: 2, title: 'اكتمال الأدوار الثلاثة',    weight: 20 },
-  { n: 3, title: 'جودة التنفيذ الـ Full-Stack', weight: 20 },
-  { n: 4, title: 'تصميم الواجهة والتجربة (UX/UI)', weight: 15 },
-  { n: 5, title: 'العرض التقديمي والقصة',       weight: 10 },
-  { n: 6, title: 'الإبداع والقرارات غير المتوقّعة', weight: 10 },
+const SCORING_RULES = [
+  'كل حكم يقيّم كل معيار بشكل مستقل.',
+  'النتيجة النهائية لكل معيار = متوسّط درجات الحكّام.',
+  'إذا اختلف حكمان بأكثر من 20 نقطة على نفس المعيار، يتمّ النقاش قبل التثبيت.',
+  'في حالة التعادل، المعيار رقم 1 (فهم المشكلة) هو الذي يحسم.',
 ];
 
-const SUBMISSION_FIELDS = [
-  { key: 'live_url',            label: 'رابط الموقع المباشر',        required: true,  hint: 'لا يُقبل localhost' },
-  { key: 'repo_url',            label: 'رابط المستودع (GitHub/GitLab)', required: true,  hint: 'عام أو وصول للحكّام' },
-  { key: 'db_schema_url',       label: 'مخطّط قاعدة البيانات',         required: true,  hint: 'صورة أو ملف SQL أو PDF' },
-  { key: 'demo_accounts',       label: 'حسابات تجريبية لكل دور',       required: true,  hint: 'حساب واحد على الأقل لكل دور' },
-  { key: 'tech_stack',          label: 'التقنيات المستخدمة',          required: true,  hint: 'Frontend · Backend · DB' },
-  { key: 'deployment_platform', label: 'منصّة الاستضافة',             required: false, hint: 'Vercel · Netlify · Render …' },
-];
-
-const RUBRIC_BANDS = [
-  { label: 'ممتاز',    range: '90 – 100%' },
-  { label: 'جيد جداً', range: '70 – 89%'  },
-  { label: 'مقبول',    range: '50 – 69%'  },
-  { label: 'ضعيف',     range: '0 – 49%'   },
-];
+const BAND_TONE = {
+  'ممتاز':    { dot: 'bg-emerald-500', text: 'text-emerald-700', bg: 'bg-emerald-50',  border: 'border-emerald-200' },
+  'جيد جداً': { dot: 'bg-ieee',         text: 'text-ieee-700',    bg: 'bg-ieee-50',     border: 'border-ieee-100'    },
+  'مقبول':    { dot: 'bg-accent',       text: 'text-amber-700',   bg: 'bg-amber-50',    border: 'border-amber-200'   },
+  'ضعيف':     { dot: 'bg-petra',        text: 'text-petra-700',   bg: 'bg-petra-50',    border: 'border-petra-100'   },
+};
 
 export default function Brief() {
   const { t } = useT();
@@ -103,8 +174,8 @@ export default function Brief() {
               ملف <span className="text-ieee">الحَكَم</span>
             </h1>
             <p className="mt-4 text-lg text-slate-600 leading-relaxed max-w-2xl">
-              مرجع سريع للسيناريوهات الستة معايير ومتطلبات التسليم.
-              مرئي للحكّام فقط، غير متاح للجمهور أو للمشاركين.
+              مرجع كامل للسيناريوهات الستة معايير ومتطلبات التسليم.
+              مرئي للحكّام فقط، غير متاح للجمهور ولا للمشاركين.
             </p>
           </div>
 
@@ -185,9 +256,7 @@ export default function Brief() {
                     </div>
                     <span
                       className={`shrink-0 inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                        f.required
-                          ? 'bg-petra-50 text-petra-700'
-                          : 'bg-slate-100 text-slate-600'
+                        f.required ? 'bg-petra-50 text-petra-700' : 'bg-slate-100 text-slate-600'
                       }`}
                     >
                       {f.required ? 'إلزامي' : 'اختياري'}
@@ -204,54 +273,105 @@ export default function Brief() {
             </div>
           </section>
 
-          {/* Criteria reference */}
+          {/* Six criteria with full rubric bands */}
           <section className="mt-16">
             <div className="flex items-baseline justify-between gap-4 mb-6">
               <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight">
                 المعايير الستة
               </h2>
               <span className="text-xs font-semibold text-slate-500" dir="ltr">
-                Reference · 100 points total
+                100 points total
               </span>
             </div>
-            <div className="grid sm:grid-cols-2 gap-4">
+
+            <div className="space-y-6">
               {CRITERIA.map((c) => (
-                <div key={c.n} className="card-brut">
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="badge-mono" dir="ltr">{String(c.n).padStart(2, '0')}</span>
-                    <span className="font-display font-extrabold text-3xl text-ieee leading-none">
-                      {c.weight}<span className="text-slate-400 text-base font-semibold">%</span>
-                    </span>
+                <article key={c.n} className="card-brut">
+                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div className="flex items-start gap-4">
+                      <span className="badge-mono shrink-0" dir="ltr">
+                        {String(c.n).padStart(2, '0')}
+                      </span>
+                      <div>
+                        <h3 className="font-display font-extrabold text-2xl text-slate-900 tracking-tight leading-snug">
+                          {c.titleAr}
+                        </h3>
+                        <p className="mt-1 text-sm font-semibold text-slate-500" dir="ltr">
+                          {c.titleEn}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-display font-extrabold text-4xl text-ieee leading-none">
+                        {c.weight}<span className="text-slate-400 text-base font-semibold">%</span>
+                      </div>
+                      <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mt-1" dir="ltr">
+                        weight
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="mt-4 font-display font-bold text-xl text-slate-900 leading-snug">
-                    {c.title}
-                  </h3>
-                </div>
+
+                  <p className="mt-5 text-slate-700 leading-relaxed">
+                    <span className="font-semibold text-slate-900">القصد: </span>
+                    {c.intentAr}
+                  </p>
+
+                  <div className="mt-5 grid sm:grid-cols-2 gap-3">
+                    {c.bands.map((b) => {
+                      const tone = BAND_TONE[b.label] ?? BAND_TONE['مقبول'];
+                      return (
+                        <div
+                          key={b.label}
+                          className={`rounded-xl border ${tone.border} ${tone.bg} p-4`}
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2">
+                              <span className={`inline-block w-2 h-2 rounded-full ${tone.dot}`} />
+                              <span className={`font-bold text-base ${tone.text}`}>{b.label}</span>
+                              <span className="text-xs text-slate-500" dir="ltr">· {b.en}</span>
+                            </div>
+                            <span className="font-mono text-xs font-semibold text-slate-600" dir="ltr">
+                              {b.range}
+                            </span>
+                          </div>
+                          <p className="mt-2 text-sm text-slate-700 leading-relaxed">{b.descAr}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </article>
               ))}
             </div>
+          </section>
 
-            {/* Rubric bands */}
-            <div className="mt-8 card-brut">
-              <div className="eyebrow mb-3">سُلّم التقييم لكل معيار</div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {RUBRIC_BANDS.map((b) => (
-                  <div key={b.label} className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                    <div className="font-display font-extrabold text-lg text-slate-900">{b.label}</div>
-                    <div className="mt-1 text-xs font-mono text-slate-500" dir="ltr">{b.range}</div>
-                  </div>
+          {/* Scoring rules */}
+          <section className="mt-16">
+            <div className="mb-6">
+              <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight">
+                قواعد التقييم
+              </h2>
+            </div>
+            <div className="card-brut">
+              <ol className="space-y-3">
+                {SCORING_RULES.map((rule, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="badge-mono shrink-0 mt-0.5" dir="ltr">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="text-slate-700 leading-relaxed">{rule}</span>
+                  </li>
                 ))}
-              </div>
+              </ol>
             </div>
           </section>
 
           {/* Footer note */}
           <section className="mt-16 mb-8">
             <div className="rounded-2xl bg-ieee-50/50 border border-ieee-100 p-5 text-sm text-slate-700 leading-relaxed">
-              <strong className="font-semibold text-ieee-700">ملاحظة للحكّام:</strong>{' '}
-              صفحة التقييم الحالية تستخدم 4 معايير (الابتكار · التنفيذ ·
-              العرض · الأثر) كل واحد من 25 نقطة. هذه الصفحة مرجع
-              للسيناريوهات والمعايير الستة المعتمدة لهاكاثون 2026 — استخدمها
-              للقراءة فقط قبل أن تبدأ تقييم الفرق.
+              <strong className="font-semibold text-ieee-700">ملاحظة للحكّام: </strong>
+              صفحة التقييم الحالية في المنصة تستخدم 4 معايير كل واحد من 25 نقطة
+              (الابتكار · التنفيذ · العرض · الأثر). هذه الصفحة هي المرجع
+              المعتمد لمعايير هاكاثون 2026 الستة — اقرأها قبل أن تبدأ
+              تقييم الفرق، وضع الدرجات في صفحة التقييم بناءً على فهمك
+              لهذه المعايير.
             </div>
           </section>
         </div>
