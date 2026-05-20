@@ -132,7 +132,7 @@ export default function JudgeDashboard() {
               {J.criteria}
             </div>
             <div className="font-display font-extrabold text-6xl mt-1 leading-none text-ieee">
-              4
+              6
             </div>
             <div className="font-mono text-[12px] uppercase tracking-wider mt-2 text-white/80">
               {J.criteriaSub}

@@ -254,7 +254,7 @@ export default {
     remaining: 'المتبقي',
     teamsToScore: 'فرق بانتظار التقييم',
     criteria: 'المعايير',
-    criteriaSub: '· 25 نقطة لكل معيار · 100 كحد أقصى',
+    criteriaSub: '· المجموع 100',
     rubricTitleA: 'سُلّم',
     rubricTitleB: 'التقييم',
     rubricSub: 'من 0 إلى 25 لكل معيار · المجموع 100',

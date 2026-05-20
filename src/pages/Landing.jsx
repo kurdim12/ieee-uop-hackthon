@@ -38,9 +38,9 @@ export default function Landing() {
               <div className="card-brut p-6 bg-slate-50">
                 <div className="eyebrow mb-3">{L.glance.title}</div>
                 <dl className="space-y-3">
-                  <Glance label={L.glance.teams} value="24" />
-                  <Glance label={L.glance.judges} value="03" />
-                  <Glance label={L.glance.criteria} value="04" />
+                  <Glance label={L.glance.teams} value="13" />
+                  <Glance label={L.glance.judges} value="05" />
+                  <Glance label={L.glance.criteria} value="06" />
                   <Glance label={L.glance.maxScore} value="100" last />
                 </dl>
               </div>

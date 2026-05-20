@@ -254,7 +254,7 @@ export default {
     remaining: 'REMAINING',
     teamsToScore: 'teams to score',
     criteria: 'CRITERIA',
-    criteriaSub: '· 25 pts each · 100 max',
+    criteriaSub: '· 100 max',
     rubricTitleA: 'JUDGING',
     rubricTitleB: 'RUBRIC',
     rubricSub: '0 – 25 each · 100 total',
