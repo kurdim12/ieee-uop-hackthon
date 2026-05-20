@@ -346,10 +346,13 @@ export default {
       },
       notScoredYet: 'لم يتم التقييم بعد',
       openRepo: 'فتح المستودع ↗',
+      deleteBtn: 'حذف الفريق',
     },
     loading: 'جارٍ التحميل…',
     loadFailed: 'تعذّر تحميل بيانات الإدارة.',
     noJudges: 'لم يتم تحميل أي حكّام.',
+    deleteConfirm: 'حذف "{team}"؟ سيؤدي ذلك إلى إزالة الفريق وجميع تقييماته. يمكن للفريق إعادة التسجيل.',
+    deleteFailed: 'تعذّر حذف الفريق.',
   },
 
   common: {

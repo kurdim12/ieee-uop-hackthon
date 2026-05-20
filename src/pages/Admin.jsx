@@ -117,6 +117,21 @@ export default function Admin() {
     navigate('/admin/login', { replace: true });
   }
 
+  async function deleteTeam(team) {
+    const confirmMsg = t.admin.deleteConfirm
+      ? t.admin.deleteConfirm.replace('{team}', team.team_name)
+      : `Delete "${team.team_name}"? This removes the team and all its scores. The team can resubmit.`;
+    if (!window.confirm(confirmMsg)) return;
+    try {
+      const { error: delErr } = await supabase.from('teams').delete().eq('id', team.id);
+      if (delErr) throw delErr;
+      setExpanded(null);
+      await load();
+    } catch (err) {
+      setError(err?.message || (t.admin.deleteFailed || 'Could not delete team.'));
+    }
+  }
+
   const updatedLabel = lastUpdated
     ? lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
     : '—';
@@ -297,14 +312,22 @@ export default function Admin() {
                                   )}
                                 </div>
 
-                                <a
-                                  href={row.github_url}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  className="mt-4 inline-flex items-center font-mono text-xs uppercase tracking-[0.2em] underline hover:text-ieee"
-                                >
-                                  {A.expanded.openRepo}
-                                </a>
+                                <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                                  <a
+                                    href={row.github_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex items-center font-mono text-xs uppercase tracking-[0.2em] underline hover:text-ieee"
+                                  >
+                                    {A.expanded.openRepo}
+                                  </a>
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); deleteTeam(row); }}
+                                    className="inline-flex items-center font-mono font-bold text-[11px] uppercase tracking-[0.2em] border-2 border-petra text-petra px-3 py-2 hover:bg-petra hover:text-white transition-colors"
+                                  >
+                                    {A.expanded.deleteBtn || 'DELETE TEAM'}
+                                  </button>
+                                </div>
                               </div>
                             </td>
                           </tr>
