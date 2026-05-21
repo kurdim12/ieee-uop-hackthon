@@ -6,6 +6,7 @@ import Toast from '../components/Toast.jsx';
 import { supabase } from '../lib/supabase.js';
 import { getJudge } from '../lib/auth.js';
 import { useT } from '../i18n/index.jsx';
+import { findHardcodedTeam } from '../data/teams.js';
 
 // Six criteria, each with its own max score. Total maxes at 100.
 const CRITERIA = [
@@ -68,8 +69,15 @@ export default function ScoreTeam() {
         if (sErr) throw sErr;
         if (cancelled) return;
         if (!tData) {
-          setError(SC.teamNotFound);
-          setTeam(null);
+          // Fall back to the hardcoded hackathon roster so judges can
+          // open + score even if the DB row is missing.
+          const hardcoded = findHardcodedTeam(teamId);
+          if (hardcoded) {
+            setTeam(hardcoded);
+          } else {
+            setError(SC.teamNotFound);
+            setTeam(null);
+          }
         } else {
           setTeam(tData);
         }

@@ -5,6 +5,7 @@ import { IconLogout, IconArrow } from '../components/Icons.jsx';
 import { supabase } from '../lib/supabase.js';
 import { getJudge, clearJudge } from '../lib/auth.js';
 import { useT } from '../i18n/index.jsx';
+import { HACKATHON_TEAMS } from '../data/teams.js';
 
 export default function JudgeDashboard() {
   const { t } = useT();
@@ -35,7 +36,15 @@ export default function JudgeDashboard() {
         if (tErr) throw tErr;
         if (sErr) throw sErr;
         if (cancelled) return;
-        setTeams(tData || []);
+        // Merge DB results with the hardcoded fallback so the
+        // hackathon teams always appear even if the DB is unreachable.
+        const dbTeams = tData || [];
+        const dbIds = new Set(dbTeams.map((tm) => tm.id));
+        const merged = [
+          ...dbTeams,
+          ...HACKATHON_TEAMS.filter((tm) => !dbIds.has(tm.id)),
+        ];
+        setTeams(merged);
         const map = {};
         (sData || []).forEach((s) => { map[s.team_id] = s.total; });
         setScores(map);
