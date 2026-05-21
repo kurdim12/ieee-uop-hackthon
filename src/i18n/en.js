@@ -191,6 +191,18 @@ export default {
       emailInvalid: 'Enter a valid email address.',
       generic: 'Something went wrong. Try again.',
     },
+    countdown: {
+      label: 'Submissions close at',
+      tz: '(Jordan time)',
+      sub: 'Submit before the timer runs out.',
+    },
+    closed: {
+      statusTag: 'CLOSED',
+      eyebrow: 'SUBMISSIONS LOCKED',
+      title: 'Submissions are closed',
+      body: 'The submission window closed at {time} on {date} (Jordan time). No further entries can be accepted.',
+      backHome: 'Back to home',
+    },
     success: {
       eyebrow: 'IDEA RECEIVED',
       heading: 'SUBMITTED ✓',

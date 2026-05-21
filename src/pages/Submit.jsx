@@ -1,9 +1,24 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout.jsx';
 import { IconArrow, IconCheck } from '../components/Icons.jsx';
 import { supabase } from '../lib/supabase.js';
 import { useT } from '../i18n/index.jsx';
+
+// Hard cutoff for team submissions — 14:00 Asia/Amman (UTC+3).
+// Edit the date string here when scheduling future events.
+const SUBMISSION_DEADLINE = new Date('2026-05-21T14:00:00+03:00');
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function formatRemaining(ms) {
+  if (ms <= 0) return '00:00:00';
+  const totalSec = Math.floor(ms / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const URL_RE = /^https?:\/\/[^\s]+\.[^\s]+/i;
@@ -43,7 +58,7 @@ const INITIAL = {
 };
 
 export default function Submit() {
-  const { t, format } = useT();
+  const { t, format, lang } = useT();
   const S = t.submit;
   const validate = useMemo(() => buildValidator(S.validation, format), [S, format]);
 
@@ -53,6 +68,22 @@ export default function Submit() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [result, setResult] = useState(null);
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const remainingMs = SUBMISSION_DEADLINE.getTime() - now.getTime();
+  const isClosed = remainingMs <= 0;
+
+  const closedAt = SUBMISSION_DEADLINE.toLocaleTimeString(lang === 'ar' ? 'ar-JO' : 'en-GB', {
+    hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Amman', hour12: false,
+  });
+  const closedDate = SUBMISSION_DEADLINE.toLocaleDateString(lang === 'ar' ? 'ar-JO' : 'en-GB', {
+    day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Asia/Amman',
+  });
 
   const liveErrors = useMemo(() => validate(values), [validate, values]);
   const descCount = values.project_desc.trim().length;
@@ -63,6 +94,10 @@ export default function Submit() {
 
   async function onSubmit(e) {
     e.preventDefault();
+    if (isClosed) {
+      setSubmitError(S.closed?.body ?? 'Submissions are closed.');
+      return;
+    }
     const v = validate(values);
     setErrors(v);
     setTouched({
@@ -143,9 +178,50 @@ export default function Submit() {
     );
   }
 
+  if (isClosed) {
+    const C = S.closed ?? {};
+    return (
+      <Layout status={C.statusTag ?? 'CLOSED'}>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 py-20">
+          <div className="card-brut bg-white p-10 sm:p-12 text-center">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-petra-50 text-petra mb-6">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+            </div>
+            <div className="eyebrow">{C.eyebrow ?? 'SUBMISSIONS LOCKED'}</div>
+            <h1 className="mt-3 font-display font-extrabold text-5xl sm:text-6xl text-slate-900 leading-tight tracking-tight">
+              {C.title ?? 'Submissions are closed'}
+            </h1>
+            <p className="mt-6 text-lg text-slate-600 leading-relaxed">
+              {(C.body ?? 'The submission window closed at {time} on {date} (Jordan time).')
+                .replace('{time}', closedAt).replace('{date}', closedDate)}
+            </p>
+            <div className="mt-10">
+              <Link to="/" className="btn-ghost">← {C.backHome ?? 'Back to home'}</Link>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout status={t.status.submission}>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 py-16">
+        {/* Live countdown until the 14:00 Jordan-time cutoff */}
+        <div className="mb-8 rounded-2xl border border-ieee-100 bg-ieee-50/60 px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-ieee-700">
+              {S.countdown?.label ?? 'Submissions close at'} {closedAt} {S.countdown?.tz ?? '(Jordan time)'}
+            </div>
+            <div className="text-sm text-slate-600 mt-0.5">
+              {S.countdown?.sub ?? 'Submit before the timer runs out.'}
+            </div>
+          </div>
+          <div className="font-mono font-bold tabular-nums text-2xl text-ieee" dir="ltr">
+            {formatRemaining(remainingMs)}
+          </div>
+        </div>
+
         <div className="eyebrow mb-4">{S.eyebrow}</div>
         <h1 className="font-display font-extrabold text-6xl sm:text-7xl leading-[0.9]">
           {S.titleA}{S.titleB ? <><br />{S.titleB}</> : null}{' '}
