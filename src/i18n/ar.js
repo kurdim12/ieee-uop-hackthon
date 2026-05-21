@@ -170,6 +170,10 @@ export default {
         'ماذا يفعل، ولمن، واللحظة الواحدة في العرض التي ستفاجئنا.',
       github: '05 · مستودع GitHub — رابط عام',
       githubPh: 'https://github.com/your-team/your-project',
+      deck: '06 · العرض التقديمي — .pdf / .pptx / .ppt / .key (حد أقصى 25 ميجا)',
+      deckPlaceholder: 'اختر ملفاً (.pdf, .pptx, .ppt, .key)',
+      deckHint: 'اضغط لاختيار الملف. إلزامي.',
+      deckClear: 'إزالة',
       email: '06 · البريد الإلكتروني للتواصل',
       emailPh: 'captain@team.edu',
       phone: '07 · رقم الهاتف للتواصل — اختياري',
@@ -189,6 +193,9 @@ export default {
       githubNotGithub: 'يجب أن يكون الرابط تابعًا لموقع github.com',
       emailRequired: 'البريد الإلكتروني للتواصل مطلوب.',
       emailInvalid: 'أدخل بريدًا إلكترونيًا صحيحًا.',
+      deckRequired: 'ملف العرض التقديمي مطلوب.',
+      deckTooLarge: 'حجم الملف كبير جداً (الحد الأقصى 25 ميجا).',
+      deckBadType: 'نوع الملف غير مدعوم. استخدم .pdf / .pptx / .ppt / .key.',
       generic: 'حدث خطأ ما. حاول مرة أخرى.',
     },
     countdown: {
@@ -209,6 +216,7 @@ export default {
       team: 'الفريق',
       project: 'المشروع',
       repository: 'المستودع',
+      deck: 'العرض التقديمي',
       submissionId: 'رقم التسجيل',
       body:
         'التقط صورة لهذه الصفحة أو احفظ رقم التسجيل. سنستخدمه عند تسجيل الحضور.',
@@ -313,6 +321,7 @@ export default {
     loadFailed: 'تعذّر تحميل الفريق.',
     saveFailed: 'تعذّر حفظ التقييم.',
     openBrief: 'فتح ملف الحَكَم ↗',
+    openDeck: 'فتح العرض التقديمي ↗',
   },
 
   leaderboard: {
@@ -382,6 +391,7 @@ export default {
       },
       notScoredYet: 'لم يتم التقييم بعد',
       openRepo: 'فتح المستودع ↗',
+      openDeck: 'فتح العرض التقديمي ↗',
     },
     loading: 'جارٍ التحميل…',
     loadFailed: 'تعذّر تحميل بيانات الإدارة.',

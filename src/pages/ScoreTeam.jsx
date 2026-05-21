@@ -54,7 +54,7 @@ export default function ScoreTeam() {
         const [{ data: tData, error: tErr }, { data: sData, error: sErr }] = await Promise.all([
           supabase
             .from('teams')
-            .select('id, team_name, project_title, project_desc, members, github_url, contact_email')
+            .select('id, team_name, project_title, project_desc, members, github_url, deck_url, contact_email')
             .eq('id', teamId)
             .maybeSingle(),
           supabase
@@ -176,16 +176,28 @@ export default function ScoreTeam() {
           <h2 className="mt-2 font-display text-2xl sm:text-3xl text-ieee">
             {team.project_title}
           </h2>
-          {team.github_url && (
-            <a
-              href={team.github_url}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-3 inline-flex items-center font-mono text-[12px] uppercase tracking-[0.18em] underline hover:text-ieee break-all"
-            >
-              {SC.openRepository} {team.github_url}
-            </a>
-          )}
+          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
+            {team.github_url && (
+              <a
+                href={team.github_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center font-mono text-[12px] uppercase tracking-[0.18em] underline hover:text-ieee break-all"
+              >
+                {SC.openRepository}
+              </a>
+            )}
+            {team.deck_url && (
+              <a
+                href={team.deck_url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.18em] underline text-petra hover:text-petra-700 break-all"
+              >
+                {SC.openDeck ?? 'open pitch deck ↗'}
+              </a>
+            )}
+          </div>
           <div className="mt-6 grid md:grid-cols-3 gap-4">
             <div className="md:col-span-2 rounded-xl border border-slate-200 p-4">
               <div className="eyebrow">{SC.theIdea}</div>

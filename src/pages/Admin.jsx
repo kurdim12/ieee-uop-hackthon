@@ -302,14 +302,26 @@ export default function Admin() {
                                   )}
                                 </div>
 
-                                <a
-                                  href={row.github_url}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  className="mt-4 inline-flex items-center font-mono text-xs uppercase tracking-[0.2em] underline hover:text-ieee"
-                                >
-                                  {A.expanded.openRepo}
-                                </a>
+                                <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+                                  <a
+                                    href={row.github_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex items-center font-mono text-xs uppercase tracking-[0.2em] underline hover:text-ieee"
+                                  >
+                                    {A.expanded.openRepo}
+                                  </a>
+                                  {row.deck_url && (
+                                    <a
+                                      href={row.deck_url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="inline-flex items-center font-mono text-xs uppercase tracking-[0.2em] underline text-petra hover:text-petra-700"
+                                    >
+                                      {A.expanded.openDeck ?? 'open pitch deck ↗'}
+                                    </a>
+                                  )}
+                                </div>
                               </div>
                             </td>
                           </tr>

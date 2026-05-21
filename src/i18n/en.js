@@ -170,6 +170,10 @@ export default {
         'What it does, who it is for, and the one moment in the demo that will surprise us.',
       github: '05 · GitHub repository — public link',
       githubPh: 'https://github.com/your-team/your-project',
+      deck: '06 · Pitch deck — .pdf / .pptx / .ppt / .key (max 25 MB)',
+      deckPlaceholder: 'Choose a file (.pdf, .pptx, .ppt, .key)',
+      deckHint: 'Click to select. Required.',
+      deckClear: 'Remove',
       email: '06 · Contact email',
       emailPh: 'captain@team.edu',
       phone: '07 · Contact phone (optional)',
@@ -189,6 +193,9 @@ export default {
       githubNotGithub: 'URL must point to github.com',
       emailRequired: 'Contact email is required.',
       emailInvalid: 'Enter a valid email address.',
+      deckRequired: 'Pitch deck file is required.',
+      deckTooLarge: 'File is too large (max 25 MB).',
+      deckBadType: 'Unsupported file type. Use .pdf / .pptx / .ppt / .key.',
       generic: 'Something went wrong. Try again.',
     },
     countdown: {
@@ -209,6 +216,7 @@ export default {
       team: 'TEAM',
       project: 'PROJECT',
       repository: 'REPOSITORY',
+      deck: 'PITCH DECK',
       submissionId: 'SUBMISSION ID',
       body:
         'Screenshot this page or note the submission ID. We will use it at check-in.',
@@ -313,6 +321,7 @@ export default {
     loadFailed: 'Failed to load team.',
     saveFailed: 'Could not save score.',
     openBrief: 'open judge brief ↗',
+    openDeck: 'open pitch deck ↗',
   },
 
   leaderboard: {
@@ -382,6 +391,7 @@ export default {
       },
       notScoredYet: 'not scored yet',
       openRepo: 'open repository ↗',
+      openDeck: 'open pitch deck ↗',
     },
     loading: 'Loading…',
     loadFailed: 'Failed to load admin data.',

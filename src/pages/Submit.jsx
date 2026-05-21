@@ -61,6 +61,10 @@ export default function Submit() {
   const { t, format, lang } = useT();
   const S = t.submit;
   const validate = useMemo(() => buildValidator(S.validation, format), [S, format]);
+  const [deckFile, setDeckFile] = useState(null);
+  const [deckError, setDeckError] = useState('');
+  const MAX_DECK_SIZE = 25 * 1024 * 1024; // 25 MB
+  const ALLOWED_DECK_TYPES = ['.pdf', '.pptx', '.ppt', '.key', '.odp'];
 
   const [values, setValues] = useState(INITIAL);
   const [errors, setErrors] = useState({});
@@ -105,10 +109,29 @@ export default function Submit() {
       project_desc: true, github_url: true, contact_email: true,
     });
     if (Object.keys(v).length > 0) return;
+    if (!deckFile) {
+      setDeckError(S.validation.deckRequired ?? 'Pitch deck file is required.');
+      return;
+    }
 
     setSubmitting(true);
     setSubmitError('');
     try {
+      // 1. Upload deck to the public `decks` Storage bucket
+      const safeName = deckFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const path = `${crypto.randomUUID()}-${safeName}`;
+      const { error: upErr } = await supabase.storage
+        .from('decks')
+        .upload(path, deckFile, {
+          contentType: deckFile.type || 'application/octet-stream',
+          upsert: false,
+        });
+      if (upErr) throw upErr;
+      const { data: pub } = supabase.storage.from('decks').getPublicUrl(path);
+      const deck_url = pub?.publicUrl;
+      if (!deck_url) throw new Error('Could not resolve deck URL.');
+
+      // 2. Insert the team row with the deck URL
       const payload = {
         team_name: values.team_name.trim(),
         members: values.members.split(',').map((s) => s.trim()).filter(Boolean).join(', '),
@@ -117,11 +140,12 @@ export default function Submit() {
         github_url: values.github_url.trim(),
         contact_email: values.contact_email.trim(),
         contact_phone: values.contact_phone.trim() || null,
+        deck_url,
       };
       const { data, error } = await supabase
         .from('teams')
         .insert(payload)
-        .select('id, team_name, project_title, github_url')
+        .select('id, team_name, project_title, github_url, deck_url')
         .single();
       if (error) throw error;
       setResult(data);
@@ -162,6 +186,15 @@ export default function Submit() {
                 {result.github_url}
               </a>
             </div>
+            {result.deck_url && (
+              <div className="mt-4 rounded-xl border border-slate-200 p-4">
+                <div className="eyebrow">{SS.deck ?? 'PITCH DECK'}</div>
+                <a href={result.deck_url} target="_blank" rel="noreferrer"
+                   className="font-mono text-sm mt-1 break-all underline hover:text-ieee">
+                  {result.deck_url}
+                </a>
+              </div>
+            )}
             <div className="mt-4 border-2 border-dashed border-slate-200/50 p-4">
               <div className="eyebrow">{SS.submissionId}</div>
               <div className="font-mono text-xs sm:text-sm mt-1 break-all">{result.id}</div>
@@ -268,6 +301,64 @@ export default function Submit() {
                    value={values.github_url} onChange={update('github_url')} onBlur={blur('github_url')}
                    disabled={submitting} required dir="ltr" />
           </Field>
+
+          <div>
+            <label htmlFor="deck_file" className="field-label">{S.fields.deck}</label>
+            <div className="mt-1">
+              <label
+                htmlFor="deck_file"
+                className="flex items-center justify-between gap-3 rounded-xl border-2 border-dashed border-slate-200 bg-white px-4 py-4 cursor-pointer hover:border-ieee hover:bg-ieee-50/30 transition"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-ieee-50 text-ieee">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+                  </span>
+                  <div>
+                    <div className="font-semibold text-slate-900 text-sm">
+                      {deckFile ? deckFile.name : (S.fields.deckPlaceholder ?? 'Choose a file (.pdf, .pptx, .ppt, .key, max 25 MB)')}
+                    </div>
+                    <div className="text-xs text-slate-500 mt-0.5">
+                      {deckFile
+                        ? `${(deckFile.size / 1024 / 1024).toFixed(1)} MB`
+                        : (S.fields.deckHint ?? 'Click to select or drop here')}
+                    </div>
+                  </div>
+                </div>
+                {deckFile && (
+                  <button
+                    type="button"
+                    onClick={(e) => { e.preventDefault(); setDeckFile(null); setDeckError(''); }}
+                    className="text-xs font-semibold text-petra hover:text-petra-700"
+                  >
+                    {S.fields.deckClear ?? 'Remove'}
+                  </button>
+                )}
+              </label>
+              <input
+                id="deck_file"
+                type="file"
+                accept={ALLOWED_DECK_TYPES.join(',')}
+                className="sr-only"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  setDeckError('');
+                  if (!f) { setDeckFile(null); return; }
+                  if (f.size > MAX_DECK_SIZE) {
+                    setDeckError(S.validation.deckTooLarge ?? 'File is too large (max 25 MB).');
+                    return;
+                  }
+                  const ext = '.' + (f.name.split('.').pop() || '').toLowerCase();
+                  if (!ALLOWED_DECK_TYPES.includes(ext)) {
+                    setDeckError(S.validation.deckBadType ?? 'Unsupported file type. Use .pdf / .pptx / .ppt / .key.');
+                    return;
+                  }
+                  setDeckFile(f);
+                }}
+                disabled={submitting}
+              />
+            </div>
+            {deckError && <p className="field-error">{deckError}</p>}
+          </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             <Field label={S.fields.email} error={showError('contact_email') && liveErrors.contact_email}>
