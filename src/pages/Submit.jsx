@@ -5,9 +5,9 @@ import { IconArrow, IconCheck } from '../components/Icons.jsx';
 import { supabase } from '../lib/supabase.js';
 import { useT } from '../i18n/index.jsx';
 
-// Hard cutoff for team submissions — 14:25 Asia/Amman (UTC+3).
+// Hard cutoff for team submissions — 14:35 Asia/Amman (UTC+3).
 // Edit the date string here when scheduling future events.
-const SUBMISSION_DEADLINE = new Date('2026-05-21T14:25:00+03:00');
+const SUBMISSION_DEADLINE = new Date('2026-05-21T14:35:00+03:00');
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
